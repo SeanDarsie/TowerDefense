@@ -11,7 +11,7 @@ public class Goblin : Creep {
 	
 	// Update is called once per frame
 	void Update () {
-
+		moveToNextSpot();
 	}
 	public override void getStunned()
 	{
@@ -25,6 +25,7 @@ public class Goblin : Creep {
 		Debug.Log("Goblin DieHorribly");
 		playerStats.UpdateScore(rewardForKilling);
 		creepManager.removeCreep(gameObject);
+		Destroy(gameObject);
 
 	}
 	protected override void dieVictoriously()

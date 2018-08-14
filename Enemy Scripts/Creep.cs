@@ -21,13 +21,15 @@ public abstract class Creep : MonoBehaviour {
 
 	// Use this for initialization
 	protected void Start () {
-		creepManager = GameObject.FindWithTag("CreepManager").GetComponent<CreepManager>();
-		playerStats = GameObject.FindWithTag("PlayerStats").GetComponent<PlayerStats>();
+		creepManager = FindObjectOfType<CreepManager>();
+		playerStats = FindObjectOfType<PlayerStats>();
+		corners = FindObjectOfType<LevelManager>().getCoreners();
 	
 	}
 	
 	// Update is called once per frame
 	void Update () {
+		Debug.Log("Creep Update");
 		moveToNextSpot();
 	}
 	
@@ -43,6 +45,6 @@ public abstract class Creep : MonoBehaviour {
 			}
 		}
 		Vector3 moveDir = transform.position - corners[cornersInd].position;
-		transform.Translate(moveDir);
+		transform.Translate(-moveDir.normalized * speed * Time.deltaTime);
 	}
 }

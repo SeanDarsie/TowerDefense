@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class CreepManager : MonoBehaviour {
-
-	private List<GameObject> activeCreeps = new List<GameObject>();
+	// keeps track of all the active creeps. 
+	[SerializeField] private List<GameObject> activeCreeps = new List<GameObject>();
 	// Use this for initialization
 	void Start () {
 		
