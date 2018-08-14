@@ -16,8 +16,8 @@ abstract public class Tower : MonoBehaviour {
 	[SerializeField] protected  int sellPrice;
 	[SerializeField] protected 	CreepManager creepManager;
 	// Use this for initialization
-	void Start () {
-		
+	protected void Start () {
+		creepManager = GameObject.FindWithTag("CreepManager").GetComponent<CreepManager>();
 	}
 	
 	// Update is called once per frame

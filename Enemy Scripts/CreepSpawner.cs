@@ -9,7 +9,7 @@ public class CreepSpawner : MonoBehaviour {
 	[SerializeField] int numberOfUniqueCreepTypes;
 	// Use this for initialization
 	void Start () {
-		
+		CM = GameObject.FindWithTag("CreepManager").GetComponent<CreepManager>();
 	}
 	
 	// Update is called once per frame

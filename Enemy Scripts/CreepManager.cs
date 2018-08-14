@@ -1,10 +1,10 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class CreepManager : MonoBehaviour {
-	// protected CreepManager () {}   
-	public List<GameObject> activeCreeps = new List<GameObject>();
+
+	private List<GameObject> activeCreeps = new List<GameObject>();
 	// Use this for initialization
 	void Start () {
 		
@@ -14,18 +14,17 @@ public class CreepManager : MonoBehaviour {
 	void Update () {
 		
 	}
-
-	public List<GameObject> getActiveCreeps()
-	{
-		return(activeCreeps);
-	}
-
-	public void addCreepToActiveList(GameObject newlySpawnedCreep)
-	{
-		activeCreeps.Add(newlySpawnedCreep);
-	}
-	public void removeCreepFromActiveList(GameObject deadCreep)
-	{
-		activeCreeps.Remove(deadCreep);
-	}
+ 	public void addCreepToActiveList(GameObject x)
+	 {
+		 activeCreeps.Add(x);
+	 }
+	 public List<GameObject> getActiveCreeps()
+	 {
+		 return(activeCreeps);
+	 }
+	 public void removeCreep(GameObject x)
+	 {
+		 if (activeCreeps.Contains(x))
+		 	activeCreeps.Remove(x);	
+	 }
 }
