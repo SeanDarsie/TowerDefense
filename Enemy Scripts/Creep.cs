@@ -4,8 +4,6 @@ using UnityEngine;
 
 public abstract class Creep : MonoBehaviour {
 
-	public abstract void getStunned();
-	public abstract void takeDamage(int damage);
 	protected abstract void dieHorribly();
 	protected abstract void dieVictoriously();
 
@@ -24,12 +22,12 @@ public abstract class Creep : MonoBehaviour {
 		creepManager = FindObjectOfType<CreepManager>();
 		playerStats = FindObjectOfType<PlayerStats>();
 		corners = FindObjectOfType<LevelManager>().getCoreners();
-	
+		creepManager.addCreepToActiveList(gameObject);
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		Debug.Log("Creep Update");
+		//Debug.Log("Creep Update");
 		moveToNextSpot();
 	}
 	
@@ -41,7 +39,8 @@ public abstract class Creep : MonoBehaviour {
 			cornersInd++;
 			if (cornersInd >= corners.Length)
 			{
-				dieHorribly();
+				cornersInd = 0;
+				gameObject.GetComponent<Goblin>().dieHorribly();
 			}
 		}
 		Vector3 moveDir = transform.position - corners[cornersInd].position;

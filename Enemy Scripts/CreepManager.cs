@@ -22,9 +22,37 @@ public class CreepManager : MonoBehaviour {
 	 {
 		 return(activeCreeps);
 	 }
+	 public void ReMakeList() // TODO: find a way to NOT do this!
+	 {
+		 activeCreeps.Clear();
+
+		Creep[] creepers = FindObjectsOfType<Creep>();
+		foreach (Creep x in creepers)
+		{
+			if (x.gameObject.activeInHierarchy)
+				activeCreeps.Add(x.gameObject);
+			else
+			{
+				// Debug.Log("Destroying inactive creep-> " + x.gameObject.name);
+				Destroy(x.gameObject);
+			}
+		}
+
+	 }
 	 public void removeCreep(GameObject x)
 	 {
 		 if (activeCreeps.Contains(x))
-		 	activeCreeps.Remove(x);	
+		 	{
+				//  Debug.Log("Removing" + x);
+				 				//  Destroy(x);
+				x.SetActive(false);
+				//ReMakeList();
+				//  activeCreeps.
+				//  foreach (GameObject p in activeCreeps)
+				//  {
+				// 	 Debug.Log(p.name);
+				//  }
+
+			 }
 	 }
 }
