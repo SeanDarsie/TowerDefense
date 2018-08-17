@@ -3,37 +3,49 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class ZoomCamera : MonoBehaviour {
-	[Range(1f, 2f)]
-	public float zoom;
-	public Transform cam;
-	Vector3 zoomPos = new Vector3();
-	private int zoomLevel = 3;
+
+
+//	Vector3 zoomPos = new Vector3();
+	[SerializeField] float minDist;
+	[SerializeField] float maxDist;
+	[SerializeField] float zoomSpeed;
+	float distFromCenter;
 	// Use this for initialization
-	void Start () {
-		zoomPos.Set(cam.position.x, cam.position.y, cam.position.z);
-	}
+	// void Start () {
+	// 	zoomPos.Set(transform.position.x, transform.position.y, transform.position.z);
+	// }
 
 	void Update()
 	{
-		if (Input.GetMouseButtonDown(0))
-			zoomIn();
-		if (Input.GetMouseButtonDown(1))
-			zoomOut();
+		if (Input.GetKey(KeyCode.W))
+		{
+			ZoomIn();
+		}
+		if (Input.GetKey(KeyCode.S))
+		{
+			ZoomOut();
+		}
+		// if (Input.GetMouseButtonDown(0))
+		// 	ZoomIN();
+		// if (Input.GetMouseButtonDown(1))
+		// 	ZoomOut();
 	}
 	
 	// Update is called once per frame
-	public void zoomIn()
+	public void ZoomIn()
 	{
-		if (zoomLevel >= 5)
+		distFromCenter = Vector3.Distance(transform.position, transform.parent.position);
+		Debug.Log("ZoomIN()");
+		if (distFromCenter <= minDist)
 			return;
-		transform.Translate(Vector3.forward * 10);
-		zoomLevel++;
+		transform.Translate(Vector3.forward * zoomSpeed * Time.deltaTime);
 	}
-	public void zoomOut()
+	public void ZoomOut()
 	{
-		if (zoomLevel <= 0)
+		Debug.Log("ZoomOut()");
+		distFromCenter = Vector3.Distance(transform.position, transform.parent.position);
+		if (distFromCenter >= maxDist)
 			return;
-		transform.Translate(-Vector3.forward * 10);
-		zoomLevel--;
+		transform.Translate(-Vector3.forward * zoomSpeed * Time.deltaTime);
 	}
 }

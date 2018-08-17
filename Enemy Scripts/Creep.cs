@@ -46,4 +46,8 @@ public abstract class Creep : MonoBehaviour {
 		Vector3 moveDir = transform.position - corners[cornersInd].position;
 		transform.Translate(-moveDir.normalized * speed * Time.deltaTime);
 	}
+	public  void SetHealth(int bonus)
+	{
+		health += bonus;
+	}
 }

@@ -44,14 +44,15 @@ public class ArrerTower : Tower {
 	}
 	[Header("Basic Attack")]
 	[SerializeField] GameObject arrowPrefab;
+	[SerializeField] Transform firePos;
 	private float shotCD;
     public override void Fire()
     {
 		float rangeFinder = 10000f;
 		foreach(GameObject x in creepManager.getActiveCreeps())
 		{
-			float distanceToTower = Vector3.Distance(transform.position, x.transform.position);
-			if (distanceToTower < rangeFinder && distanceToTower <= range)
+			float distanceToTower = Vector3.Distance(firePos.position, x.transform.position);
+			if (distanceToTower < rangeFinder && distanceToTower <= range && x.activeInHierarchy)
 				{
 					target = x.transform;
 					rangeFinder = distanceToTower;

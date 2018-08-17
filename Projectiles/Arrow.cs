@@ -25,6 +25,7 @@ public class Arrow : MonoBehaviour {
 			{
 				Debug.Log("Arrow.cs found a hittable thingy");
 				badGuy.TakeDamage(damage);
+				Destroy(gameObject);
 			}
 		other.GetComponent<IHittable>().TakeDamage(damage);	
 	}

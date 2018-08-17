@@ -42,6 +42,7 @@ public class CreepSpawner : MonoBehaviour {
 		// If we start repeating the same enemies then we need to start incrimenting their health higher and higher. this is where that should be done
 		GameObject x = Instantiate(creeps[wave % numberOfUniqueCreepTypes], whereToSpawn.position, whereToSpawn.rotation) as GameObject;
 		CM.addCreepToActiveList(x);
+		x.GetComponent<Creep>().SetHealth(wave);
 		x.name = "Goblin" + names.ToString();
 		names++;
 	}
