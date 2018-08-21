@@ -5,32 +5,40 @@ using UnityEngine.UI;
 
 public class UItower : MonoBehaviour {
 	// the tower available at this ui element
-	public GameObject tower;
-	public UImanager manager;
-
-	// / <summary>
-	// / OnMouseDown is called when the user has pressed the mouse button while
-	// / over the GUIElement or Collider.
-	// / </summary>
-	void OnMouseDown()
-	{
-		manager.selectedTower = tower;
-	}
-	// / <summary>
-	// / Called when the mouse enters the GUIElement or Collider.
-	// / </summary>
-	void OnMouseEnter()
-	{
-		// make some kind of indication that the player is selecting this element. 
-	}
-	// Use this for initialization
-
-	void Start () {
-		
+	[SerializeField] GameObject towerPrefab; // the tower prefab that this button allows the user to select. 
+	[SerializeField] GameObject towerModel; // the model with no scripts on it that will show the player where they are placing they tower
+	// [SerializeField] UImanager manager;
+	[SerializeField] TowerPlacingScript placeTower;
+	[SerializeField] PlayerStats player;
+	void Start () { 
+		player = FindObjectOfType<PlayerStats>();
+		placeTower = FindObjectOfType<TowerPlacingScript>();
+		// manager = FindObjectOfType<UImanager>();
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		
+	}
+	public void selectTower()
+	{
+		if (player.monies >= towerPrefab.GetComponent<Tower>().GetPrice())
+		{
+			// successfully select tower
+			placeTower.towerModel = towerModel;
+			placeTower.towerPrefab = towerPrefab;
+			placeTower.towerSelected = true;
+			placeTower.selectedTowerPrice = towerPrefab.GetComponent<Tower>().GetPrice();
+		}
+		else
+		{
+			// cannot select tower
+			// tell the player "not enough monies"
+			// maybe flash the gold red for a second.
+			placeTower.towerModel = null;
+			placeTower.towerPrefab = null;
+			placeTower.towerSelected = false;
+			placeTower.selectedTowerPrice = 0;
+		}
 	}
 }

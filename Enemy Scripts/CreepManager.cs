@@ -20,6 +20,7 @@ public class CreepManager : MonoBehaviour {
 	 }
 	 public List<GameObject> getActiveCreeps()
 	 {
+		 ReMakeList();
 		 return(activeCreeps);
 	 }
 	 public void ReMakeList() // TODO: find a way to NOT do this!

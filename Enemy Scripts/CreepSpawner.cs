@@ -10,6 +10,8 @@ public class CreepSpawner : MonoBehaviour {
 	[SerializeField] Transform whereToSpawn;
 	[SerializeField] int numberOfUniqueCreepTypes;
 	[SerializeField] int wave;
+	[SerializeField] float timeTillNextWave;
+	[SerializeField] int numberOfCreepsToSpawn;
 	float timeBetweenWaves;
 	int names = 0;
 	// Use this for initialization
@@ -28,9 +30,9 @@ public class CreepSpawner : MonoBehaviour {
 	public void sendCreepWave()
 	{
 		// remove inactive creeps here. 
-		StartCoroutine(spawnCreepWave(wave, 3, 2.0f));
+		StartCoroutine(spawnCreepWave(wave, numberOfCreepsToSpawn, 2.0f));
 		wave++;
-		timeBetweenWaves = Time.time + 25.0f;
+		timeBetweenWaves = Time.time + timeTillNextWave;
 		CM.ReMakeList();
 	}
 
@@ -43,6 +45,7 @@ public class CreepSpawner : MonoBehaviour {
 		GameObject x = Instantiate(creeps[wave % numberOfUniqueCreepTypes], whereToSpawn.position, whereToSpawn.rotation) as GameObject;
 		CM.addCreepToActiveList(x);
 		x.GetComponent<Creep>().SetHealth(wave);
+		x.GetComponent<Creep>().SetSpeed(Random.Range(-1, 1));		
 		x.name = "Goblin" + names.ToString();
 		names++;
 	}

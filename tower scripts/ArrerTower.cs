@@ -52,7 +52,7 @@ public class ArrerTower : Tower {
 		foreach(GameObject x in creepManager.getActiveCreeps())
 		{
 			float distanceToTower = Vector3.Distance(firePos.position, x.transform.position);
-			if (distanceToTower < rangeFinder && distanceToTower <= range && x.activeInHierarchy)
+			if (distanceToTower < rangeFinder && distanceToTower <= range && x.activeInHierarchy && Mathf.Abs(x.transform.position.y - transform.position.y) <= 1f)
 				{
 					target = x.transform;
 					rangeFinder = distanceToTower;
@@ -69,18 +69,7 @@ public class ArrerTower : Tower {
 		arrow.target = target;
 		shotCD = Time.time + reloadSpeed;
         // throw new System.NotImplementedException();
-    }
-
-    public override void Sell()
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public override void Upgrade()
-    {
-        throw new System.NotImplementedException();
-    }
-	
+    }	
 	// scatter arrow section
 	[Header("Scatter Ability")]
 	[HideInInspector]
