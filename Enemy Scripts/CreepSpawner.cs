@@ -12,6 +12,7 @@ public class CreepSpawner : MonoBehaviour {
 	[SerializeField] int wave = 0;
 	[SerializeField] float timeTillNextWave;
 	[SerializeField] int numberOfCreepsToSpawn;
+	[SerializeField] float timeBetweenIndividualCreeps;
 	float timeBetweenWaves;
 	bool canSendWave = true;
 	int names = 0;
@@ -32,7 +33,7 @@ public class CreepSpawner : MonoBehaviour {
 	{
 		canSendWave = false;
 		// remove inactive creeps here. 
-		StartCoroutine(spawnCreepWave(wave, numberOfCreepsToSpawn, 2.0f));
+		StartCoroutine(spawnCreepWave(wave, numberOfCreepsToSpawn, timeBetweenIndividualCreeps));
 		wave++;
 		// timeBetweenWaves = Time.time + timeTillNextWave;
 		CM.ReMakeList();
