@@ -12,15 +12,6 @@ public class LevelManager : MonoBehaviour {
 	[SerializeField] Transform[] corners5;
 	
 	[SerializeField] int levelIndex;
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
 
 	public Transform[] getCoreners()
 	{
@@ -41,6 +32,21 @@ public class LevelManager : MonoBehaviour {
 			default:
 				return (corners0);
 			
+		}
+	}
+	public void RestartCurrentLevel()
+	{
+		Time.timeScale = 1f;
+		List<GameObject> activeCreeps = FindObjectOfType<CreepManager>().getActiveCreeps();
+		foreach (GameObject x in activeCreeps)
+			{
+				x.SetActive(false);
+			}
+			FindObjectOfType<CreepManager>().ReMakeList();
+		CreepSpawner[] spawners = FindObjectsOfType<CreepSpawner>();
+		foreach (CreepSpawner x in spawners)
+		{
+			x.SetWave(0);
 		}
 	}
 }

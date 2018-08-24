@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class Goblin : Creep, IHittable, IStunnable, INettable
 {	
-	// Update is called once per frame
-	void Update () {
-		moveToNextSpot();
-	}
+	// // Update is called once per frame
+	// void Update () {
+	// 	moveToNextSpot();
+	// }
 	public void GetStunned(float seconds)
 	{
 		// TODO: play a stunned animation. and sound!

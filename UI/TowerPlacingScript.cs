@@ -22,6 +22,21 @@ public class TowerPlacingScript : MonoBehaviour {
 		if (selectetTowerUI != null)
 			selectetTowerUI.SetActive(false);
 	}
+	/// <summary>
+	/// Update is called every frame, if the MonoBehaviour is enabled.
+	/// </summary>
+	// void Update()
+	// {
+	// 	if (Input.GetMouseButtonDown(0))
+	// 		{	RaycastHit hit;
+	// 			if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, 100000))
+	// 			{
+	// 				Tower tower = hit.collider.GetComponent<Tower>();
+	// 				if (tower == null)
+	// 					CloseTowerUI();
+	// 			}
+	// 		}
+	// }
 	public void ShowTowerStats(GameObject tower)
 	{
 		upgradeTowerButton.interactable = true;

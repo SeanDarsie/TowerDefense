@@ -67,6 +67,7 @@ public class TowerBlockScript : MonoBehaviour {
 	}
 	public void stopShowingTower()
 	{
+		Debug.Log("How many times is stop showing TowerCalled?");
 		towerModel.SetActive(false);
 	}
 	public void placeTower()

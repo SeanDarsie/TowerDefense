@@ -11,13 +11,15 @@ public class PlayerStats : MonoBehaviour {
 	[SerializeField] Text scoreTxt;
 	[SerializeField] Text lifeTxt;
 	[SerializeField] Text moniesTxt;
-	
-
+	[SerializeField] GameObject pauseGameUI;
+	QuitAndRestart quitAndRestart;
+	bool playerHasLost = false;
     // Use this for initialization
     void Start () {
 		AdjustHealth(0);
 		AdjustMonies(0);
 		UpdateScore(0);
+		quitAndRestart = FindObjectOfType<QuitAndRestart>();
 	}
 	/// <summary>
 	/// Update is called every frame, if the MonoBehaviour is enabled.
@@ -49,8 +51,12 @@ public class PlayerStats : MonoBehaviour {
 	}
 	void Lose()
 	{
-		Debug.LogError("unimplenemted function. PlayerStats.Lose()");
+		playerHasLost = true;
+		quitAndRestart.PauseGame(playerHasLost);
+
 		// pause the game. 
+		// change the music.
+		// bring up a menu.
 	}
 
 }

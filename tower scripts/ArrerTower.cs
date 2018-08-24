@@ -7,33 +7,35 @@ public class ArrerTower : Tower {
     {
 		
 	}
+
+	private float netCooldown;
 	void Update () {
 		if (netSelected)
 		{
-			line = GetComponent<LineRenderer>();
+			// line = GetComponent<LineRenderer>();
 
-				// RaycastHit hit;
+			// 	// RaycastHit hit;
                 
-                // if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, 100)) {
-				// 	pos = hit.point;
-				// 	pos.y = 5.0f;
-				// 	line.SetPosition(0, pos.normalized * 5.0f);
-                // }
+            //     // if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, 100)) {
+			// 	// 	pos = hit.point;
+			// 	// 	pos.y = 5.0f;
+			// 	// 	line.SetPosition(0, pos.normalized * 5.0f);
+            //     // }
 		
-			RaycastHit hit;
-			if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, 100000))
-			{
-				// netThrowDir = hit.point - transform.position;
-				netThrowDir = hit.point;
-				// netThrowDir = transform.position - Input.mousePosition; // points from tower to mouse
-				netThrowDir.y = transform.position.y;
+			// RaycastHit hit;
+			// if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, 100000))
+			// {
+			// 	// netThrowDir = hit.poinst - transform.position;
+			// 	netThrowDir = hit.point;
+			// 	// netThrowDir = transform.position - Input.mousePosition; // points from tower to mouse
+			// 	netThrowDir.y = transform.position.y;
 
-				// RaycastHit hit;
+			// 	// RaycastHit hit;
 
-				line.SetPosition(1, netThrowDir/*hit.point*/);
-				line.SetPosition(0, transform.position);
-			}
-			// draw a line from the tower to the mouse.
+			// 	line.SetPosition(1, netThrowDir/*hit.point*/);
+			// 	line.SetPosition(0, transform.position);
+			// }
+			// // draw a line from the tower to the mouse.
 			if (Input.GetMouseButtonDown(0))
 				throwNet();
 		}
@@ -43,9 +45,8 @@ public class ArrerTower : Tower {
 		}
 	}
 	[Header("Basic Attack")]
-	[SerializeField] GameObject arrowPrefab;
-	[SerializeField] Transform firePos;
 	private float shotCD;
+
     public override void Fire()
     {
 		float rangeFinder = 10000f;
@@ -63,7 +64,7 @@ public class ArrerTower : Tower {
 			Vector3.Distance(transform.position, target.position) > range)
 			return;
 		// shoot an arrow and give it a target to fly towards.
-		GameObject myArrow = Instantiate(arrowPrefab, transform.position, transform.rotation) as GameObject;
+		GameObject myArrow = Instantiate(projectile, firePos.position, firePos.rotation) as GameObject;
 		Arrow arrow = myArrow.GetComponent<Arrow>(); 
 		arrow.damage = damage;
 		arrow.target = target;
@@ -116,7 +117,7 @@ public class ArrerTower : Tower {
     // throw net section
     [Header("Net Ability Settings")]
     [HideInInspector]
-	[SerializeField] bool netSelected;
+	[SerializeField] bool netSelected = false;
 	private LineRenderer line;
 	[SerializeField] float netRange;
 	[SerializeField] float netCD;
@@ -124,26 +125,33 @@ public class ArrerTower : Tower {
 	[SerializeField] Transform throwPos;
 	[SerializeField] float forceOfThrow;
 	Vector3 netThrowDir = new Vector3();
+	[SerializeField] GameObject netIndicator;
 	public void throwNet() // simply needs to throw the net in the netThrowDir 
 	{
+		shotCooldown = Time.time + shotCD;
 		// direction is from tower position to mouse pointer. 
 		netSelected = false;
 		//Quaternion shoot = new Quaternion(0, throwPos.rotation.y, 0, throwPos.rotation.w);
-		GameObject throwthis = Instantiate(netObject, throwPos.position, throwPos.rotation);
+		GameObject throwthis = Instantiate(netObject, netIndicator.transform.position, netIndicator.transform.rotation);
 		
 		throwthis.GetComponent<Rigidbody>().AddRelativeForce(0,0,forceOfThrow);
 		deactivateNetIndicator();
 	}
 
+	private float shotCooldown;
 	public void activateNetIndicator()
 	{
+		if (Time.time < shotCooldown)
+			return;
 		netSelected = true;
-		line = GetComponent<LineRenderer>();
+		netIndicator.SetActive(true);
+		// line = GetComponent<LineRenderer>();
 	}
 	public void deactivateNetIndicator() 
 	{
+		netIndicator.SetActive(false);
 		netSelected = false;
-		line.SetPosition(1, transform.position);
+		// line.SetPosition(1, transform.position);
 	}
     // Use this for initialization
     // void Start () {

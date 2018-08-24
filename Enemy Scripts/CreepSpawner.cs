@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEditor;
+// using UnityEditor;
 
 public class CreepSpawner : MonoBehaviour {
 	// who is supposed to tell the creep spawner to start spawning. Game Manager???
@@ -9,10 +9,11 @@ public class CreepSpawner : MonoBehaviour {
 	[SerializeField] GameObject[] creeps; 
 	[SerializeField] Transform whereToSpawn;
 	[SerializeField] int numberOfUniqueCreepTypes;
-	[SerializeField] int wave;
+	[SerializeField] int wave = 0;
 	[SerializeField] float timeTillNextWave;
 	[SerializeField] int numberOfCreepsToSpawn;
 	float timeBetweenWaves;
+	bool canSendWave = true;
 	int names = 0;
 	// Use this for initialization
 	void Start () { // commment
@@ -23,16 +24,17 @@ public class CreepSpawner : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if (Time.time >= timeBetweenWaves)
+		if (Time.time >= timeBetweenWaves && canSendWave == true)
 			sendCreepWave();
 	}
 
 	public void sendCreepWave()
 	{
+		canSendWave = false;
 		// remove inactive creeps here. 
 		StartCoroutine(spawnCreepWave(wave, numberOfCreepsToSpawn, 2.0f));
 		wave++;
-		timeBetweenWaves = Time.time + timeTillNextWave;
+		// timeBetweenWaves = Time.time + timeTillNextWave;
 		CM.ReMakeList();
 	}
 
@@ -57,6 +59,12 @@ public class CreepSpawner : MonoBehaviour {
 			spawnSingleCreep(waveNumber);
 			yield return new WaitForSeconds(seconds);
 		}
+		canSendWave = true;
+		timeBetweenWaves = Time.time + timeTillNextWave;
 		yield return null;
+	}
+	public void SetWave(int wave)
+	{
+		this.wave = wave;
 	}
 }

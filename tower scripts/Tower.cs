@@ -24,7 +24,8 @@ abstract public class Tower : MonoBehaviour {
 	[SerializeField] protected  int upgradePrice;
 	[SerializeField] protected  int sellPrice;
 	[SerializeField] protected Transform target;
-	
+	[SerializeField] protected GameObject projectile;
+	[SerializeField] protected Transform firePos;
 	[SerializeField] protected 	CreepManager creepManager;
 	// Use this for initialization
 	protected void Start () {
