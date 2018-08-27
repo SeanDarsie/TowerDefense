@@ -12,7 +12,7 @@ public class NetScript : MonoBehaviour { // could use this as a single standalon
 		INettable x = other.GetComponent<INettable>();
 		if (x != null)
 		{
-			x.BeNetted();
+			x.BeNetted(1.0f);
 		}
 	}
 }

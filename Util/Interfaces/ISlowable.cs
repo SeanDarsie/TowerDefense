@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Goblin : Creep
-{	
-	// IMMA FUCKING GOBBY!
+public interface ISlowable  {
+	void BeSlowed(float amt);
 }

@@ -38,6 +38,8 @@ public class ArrerTower : Tower {
 			// // draw a line from the tower to the mouse.
 			if (Input.GetMouseButtonDown(0))
 				throwNet();
+			if (Input.GetMouseButtonDown(1))
+				deactivateNetIndicator();
 		}
 		if (Time.time >= shotCD)
 		{

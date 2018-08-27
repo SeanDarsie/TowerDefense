@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class MageTower : Tower {
-	[SerializeField] PushEnabler pushEnabler;
+	[SerializeField] CountEnemiesInCollider pushEnabler;
 	// Use this for initialization
 
 	
@@ -20,6 +20,10 @@ public class MageTower : Tower {
 			if (Input.GetMouseButtonDown(0))
 			{
 				ForcePush();
+			}
+			if (Input.GetMouseButtonDown(1))
+			{
+				DeactivateForcePushIndicator();
 			}
 		}
 	}

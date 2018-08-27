@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class Creep : MonoBehaviour, IPushable {
+public abstract class Creep : MonoBehaviour, IPushable, IHittable, IStunnable, INettable, ISlowable {
 
-	protected abstract void dieHorribly();
+	// protected abstract void dieHorribly();
 	// protected abstract void dieVictoriously();
 
 	[SerializeField] protected Transform[] corners;
@@ -91,7 +91,8 @@ public abstract class Creep : MonoBehaviour, IPushable {
 		playerStats.AdjustHealth(-damage);
 	}
 	[SerializeField] float howLongAmIPushedFor;
-	bool gotPushed = false;
+	protected bool gotPushed = false;
+	[SerializeField] protected float forceToBePushedBy;
 	public void BePushed(Vector3 directionOfPush)
 	{
 		// move away from the tower that did the pushing. After a certain amount of seconds check if what is below isa  cloud in a certain amount of seconds
@@ -101,11 +102,71 @@ public abstract class Creep : MonoBehaviour, IPushable {
 		gotPushed = true;
 		GetComponent<Rigidbody>().isKinematic = false;
 		GetComponent<Rigidbody>().useGravity = true;
-		GetComponent<Rigidbody>().AddRelativeForce(directionOfPush * 180f);
-		//StartCoroutine(PushedAway(howLongToBePushedBack, directionOfPush));
-		// gameObject.GetComponent<Rigidbody>().useGravity = true;
+		GetComponent<Rigidbody>().AddRelativeForce(directionOfPush * forceToBePushedBy);
+
 	}
-	// IEnumerator PushedAway(float lengthOfPushback, Vector3 directionOfPush)
+	public void TakeDamage(int damage)
+	{
+		damage -= armor;
+		health -= damage;
+		if (health <= 0)
+			dieHorribly();
+	}
+
+	protected void dieHorribly()
+	{
+		// TODO: show some effect that the goblin has died.
+		// play a death sound as well
+		playerStats.UpdateScore(rewardForKilling);
+		playerStats.AdjustMonies(moneyForKilling);
+		creepManager.removeCreep(gameObject);
+	}
+	public void GetStunned(float seconds)
+	{
+		// TODO: play a stunned animation. and sound!
+		if (speed == 0)
+			CancelInvoke(); 
+		else
+			tempSpeed = speed;
+		speed = 0;
+		Invoke("ResetSpeed", seconds);
+		// stop for seconds and 
+	}
+	float tempSpeed;
+	public void BeNetted(float seconds)
+	{
+		if (speed == 0)
+			CancelInvoke(); 
+		else
+			tempSpeed = speed;
+		speed = 0;
+		Invoke("ResetSpeed", seconds);
+	}
+	public void BeSlowed(float amt)
+	{
+		if (speed < tempSpeed)
+			{
+				CancelInvoke();
+				Invoke("ResetSpeed", 2.0f);
+				return;
+			}
+		else
+			tempSpeed = speed;
+		speed *= amt;
+		Debug.Log("Creep Speed: " +speed);
+		// speed = speed > amt ? (speed - amt) : 0f;
+
+		Invoke("ResetSpeed", 2.0f);
+	}
+	void ResetSpeed() {speed = tempSpeed;}
+
+
+
+
+
+
+
+//TODO:	// IEnumerator PushedAway(float lengthOfPushback, Vector3 directionOfPush)
 	// {
 	// 	float speedOfPush = 1.0f;
 	// 	while (Time.time <= lengthOfPushback)

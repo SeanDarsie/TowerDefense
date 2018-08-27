@@ -1,4 +1,4 @@
 public interface INettable
 {
-    void BeNetted();
+    void BeNetted(float seconds);
 }
