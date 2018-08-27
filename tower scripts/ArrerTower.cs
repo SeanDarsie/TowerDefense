@@ -7,10 +7,8 @@ public class ArrerTower : Tower {
     {
 		
 	}
-
-	private float netCooldown;
 	void Update () {
-		if (netSelected)
+		if (abilityReady)
 		{
 			// line = GetComponent<LineRenderer>();
 
@@ -70,70 +68,67 @@ public class ArrerTower : Tower {
 		Arrow arrow = myArrow.GetComponent<Arrow>(); 
 		arrow.damage = damage;
 		arrow.target = target;
+		arrow.damageType = damageType;
 		shotCD = Time.time + reloadSpeed;
         // throw new System.NotImplementedException();
     }	
 	// scatter arrow section
-	[Header("Scatter Ability")]
-	[HideInInspector]
-	bool scatterSelected; // for ui and indicator purposes. 
-	public int scatterDamage;
-	public float scatterRadius;
-	public float scatterCD;
-	private float creepDist;
-	public void upgradeScatterArrowAbility()
-	{
-		scatterDamage++; // increase scatter damage.
-		scatterRadius++; // increase radius ??
-		scatterCD--; // reduce CD
-	}
+	// [Header("Scatter Ability")]
+	// [HideInInspector]
+	// bool scatterSelected; // for ui and indicator purposes. 
+	// public int scatterDamage;
+	// public float scatterRadius;
+	// public float scatterCD;
+	// private float creepDist;
+	// public void upgradeScatterArrowAbility()
+	// {
+	// 	scatterDamage++; // increase scatter damage.
+	// 	scatterRadius++; // increase radius ??
+	// 	scatterCD--; // reduce CD
+	// }
 	// void /// <summary>
 	// /// Callback to draw gizmos that are pickable and always drawn.
 	// /// </summary>
-	public Color color;
-	void OnDrawGizmos()
-	{
-		Gizmos.color = color;
-		Gizmos.DrawSphere(transform.position, range);
-	}
-	public void scatterArrow() // list or array. doesn't matter to me atm.
-    {
-		List<GameObject> creeps = creepManager.getActiveCreeps();
-        // deal damage to all creeps within tower range.
-		// Debug.Log("Creeps   " + creeps[0].name);
-		int something = 0;
-        foreach (GameObject x in creeps)
-        {
-			// Debug.Log("foreach loop ScatterArrow " + something);
-			creepDist = Vector3.Distance(transform.position, x.gameObject.transform.position);
-			if (creepDist <= scatterRadius && x.activeInHierarchy)
-			{
-				IHittable badGuy = x.GetComponent<IHittable>();
-				if (badGuy != null)
-					badGuy.TakeDamage(scatterDamage);
-			}
-			something++;
-        }
-		something = 0;
-    }
+	// public Color color;
+	// void OnDrawGizmos()
+	// {
+	// 	Gizmos.color = color;
+	// 	Gizmos.DrawSphere(transform.position, range);
+	// }
+	// public void scatterArrow() // list or array. doesn't matter to me atm.
+    // {
+	// 	List<GameObject> creeps = creepManager.getActiveCreeps();
+    //     // deal damage to all creeps within tower range.
+	// 	// Debug.Log("Creeps   " + creeps[0].name);
+	// 	int something = 0;
+    //     foreach (GameObject x in creeps)
+    //     {
+	// 		// Debug.Log("foreach loop ScatterArrow " + something);
+	// 		creepDist = Vector3.Distance(transform.position, x.gameObject.transform.position);
+	// 		if (creepDist <= scatterRadius && x.activeInHierarchy)
+	// 		{
+	// 			IHittable badGuy = x.GetComponent<IHittable>();
+	// 			if (badGuy != null)
+	// 				badGuy.TakeDamage(scatterDamage);
+	// 		}
+	// 		something++;
+    //     }
+	// 	something = 0;
+    // }
     // throw net section
     [Header("Net Ability Settings")]
     [HideInInspector]
-	[SerializeField] bool netSelected = false;
-	private LineRenderer line;
+	// [SerializeField] bool netSelected = false;
 	[SerializeField] float netRange;
 	[SerializeField] float netCD;
 	[SerializeField] GameObject netObject;
 	[SerializeField] Transform throwPos;
 	[SerializeField] float forceOfThrow;
-	Vector3 netThrowDir = new Vector3();
 	[SerializeField] GameObject netIndicator;
 	public void throwNet() // simply needs to throw the net in the netThrowDir 
 	{
-		shotCooldown = Time.time + shotCD;
-		// direction is from tower position to mouse pointer. 
-		netSelected = false;
-		//Quaternion shoot = new Quaternion(0, throwPos.rotation.y, 0, throwPos.rotation.w);
+		shotCooldown = Time.time + abilityCooldown;
+		abilityReady = false;
 		GameObject throwthis = Instantiate(netObject, netIndicator.transform.position, netIndicator.transform.rotation);
 		
 		throwthis.GetComponent<Rigidbody>().AddRelativeForce(0,0,forceOfThrow);
@@ -145,25 +140,15 @@ public class ArrerTower : Tower {
 	{
 		if (Time.time < shotCooldown)
 			return;
-		netSelected = true;
+		abilityReady = true;
 		netIndicator.SetActive(true);
-		// line = GetComponent<LineRenderer>();
 	}
 	public void deactivateNetIndicator() 
 	{
 		netIndicator.SetActive(false);
-		netSelected = false;
-		// line.SetPosition(1, transform.position);
+		abilityReady = false;
+
 	}
-    // Use this for initialization
-    // void Start () {
-			
-	// }
 
 }
-	// public float damage;
-	// public float range;
-	// public int level;
-	// public int price;
-	// public int upgradePrice;
-	// public int sellPrice;
+	

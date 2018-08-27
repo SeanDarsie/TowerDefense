@@ -8,7 +8,8 @@ abstract public class Tower : MonoBehaviour {
 	/// Start is called on the frame when a script is enabled just before
 	/// any of the Update methods is called the first time.
 	/// </summary>
-
+	public enum DamageType {PHYSICAL,LIGHTNING,FROST,FIRE,POISON, MAGIC};
+	public DamageType damageType; 
 	abstract public void Fire();
 
 	[Header("From Tower class")]
@@ -27,6 +28,8 @@ abstract public class Tower : MonoBehaviour {
 	[SerializeField] protected GameObject projectile;
 	[SerializeField] protected Transform firePos;
 	[SerializeField] protected 	CreepManager creepManager;
+	[SerializeField] protected float abilityCooldown;
+	[SerializeField] protected bool abilityReady = false;
 	// Use this for initialization
 	protected void Start () {
 		creepManager = FindObjectOfType<CreepManager>();

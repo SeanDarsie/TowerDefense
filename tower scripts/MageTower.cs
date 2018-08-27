@@ -15,7 +15,7 @@ public class MageTower : Tower {
 		{
 			Fire();
 		}
-		if (forcePushReady == true)
+		if (abilityReady == true)
 		{
 			if (Input.GetMouseButtonDown(0))
 			{
@@ -48,18 +48,18 @@ public class MageTower : Tower {
 		Arrow arrow = myArrow.GetComponent<Arrow>(); 
 		arrow.damage = damage;
 		arrow.target = target;
+		arrow.damageType = damageType;
 		shotCD = Time.time + reloadSpeed;
 	}
-	bool forcePushReady = false;
+	// bool forcePushReady = false;
 	[SerializeField] GameObject forcePushIndicator;
-	[SerializeField] float forcePushCooldown;
 	void ForcePush()
 	{
-		forcePushCD = Time.time + forcePushCooldown;
+		forcePushCD = Time.time + abilityCooldown;
 		foreach (GameObject x in pushEnabler.creepsInsideCollider)
 		{
 			Vector3 someDirection = x.transform.position - transform.position;
-			Debug.Log("someDirection: " + someDirection);
+			// Debug.Log("someDirection: " + someDirection);
 			x.GetComponent<IPushable>().BePushed(someDirection);
 			// x.GetComponent<Creep>().enabled = false;
 			x.GetComponent<IPushable>().BePushed(someDirection);
@@ -70,14 +70,14 @@ public class MageTower : Tower {
 	{
 		if (Time.time < forcePushCD)
 			return;
-		forcePushReady = true;
+		abilityReady = true;
 		forcePushIndicator.SetActive(true);
 		// line = GetComponent<LineRenderer>();
 	}
 	public void DeactivateForcePushIndicator() 
 	{
 		forcePushIndicator.SetActive(false);
-		forcePushReady = false;
+		abilityReady = false;
 		// line.SetPosition(1, transform.position);
 	}
 }

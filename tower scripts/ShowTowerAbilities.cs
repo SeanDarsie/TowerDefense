@@ -21,7 +21,7 @@ public class ShowTowerAbilities : MonoBehaviour {
 	/// </summary>
 	void OnMouseDown()			
 	{
-		Debug.Log(name);
+//		Debug.Log(name);
 		if (towerPlacer.selectetTowerUI != null)
 			towerPlacer.CloseTowerUI();
 		towerUICanvas.SetActive(true);

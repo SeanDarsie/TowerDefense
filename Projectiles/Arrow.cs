@@ -16,6 +16,8 @@ public class Arrow : MonoBehaviour {
 	// [HideInInspector]
 	public Transform target; // The tower tells the arrow which target
 	[HideInInspector]
+	public Tower.DamageType damageType;
+	[HideInInspector]
 	public int damage;
 	[SerializeField] float arrowSpeed;
 
@@ -32,7 +34,7 @@ public class Arrow : MonoBehaviour {
 		IHittable badGuy = other.GetComponent<IHittable>();
 		if (badGuy != null && other.gameObject.name == target.gameObject.name)
 			{
-				badGuy.TakeDamage(damage);
+				badGuy.TakeDamage(damage, damageType);
 				Destroy(gameObject);
 			}
 		// other.GetComponent<IHittable>().TakeDamage(damage);	

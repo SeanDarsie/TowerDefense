@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface IHittable
-{
-	void TakeDamage(int x, Tower.DamageType damageType);
+public interface IShockable {
+	void BeShocked(int damage, int numberOfBounces);
 }

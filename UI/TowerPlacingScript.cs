@@ -27,17 +27,17 @@ public class TowerPlacingScript : MonoBehaviour {
 	/// </summary>
 	void Update()
 	{
-		if (Input.GetMouseButtonDown(0))
-			{	RaycastHit hit;
-				if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, 1000))
-				{
-					// Tower tower = hit.collider.GetComponent<Tower>();
-					// if (tower == null)
-					// 	CloseTowerUI();
-				}
-				// else
-				// 	CloseTowerUI();
-			}
+		// if (Input.GetMouseButtonDown(0))
+		// 	{	RaycastHit hit;
+		// 		if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, 1000))
+		// 		{
+		// 			// Tower tower = hit.collider.GetComponent<Tower>();
+		// 			// if (tower == null)
+		// 			// 	CloseTowerUI();
+		// 		}
+		// 		// else
+		// 		// 	CloseTowerUI();
+		// 	}
 	}
 	public void ShowTowerStats(GameObject tower)
 	{

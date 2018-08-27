@@ -3,21 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class FrostTower : Tower {
-
-	[SerializeField] float flashFreezeCD;
 	[SerializeField] GameObject flashFreezeIndicator;
-	// [SerializeField] 
-	// [SerializeField] 
-	// [SerializeField] 
-
 	float shotCD;
-	bool flashFreezeReady;
+	// bool flashFreezeReady;
 	void Update () {
 		if (Time.time >= shotCD)
 		{
 			Fire();
 		}
-		if (flashFreezeReady == true)
+		if (abilityReady == true)
 		{
 			if (Input.GetMouseButtonDown(0))
 			{
@@ -45,6 +39,7 @@ public class FrostTower : Tower {
 		}
 	}
 	[SerializeField] float howLongToFreezeEnemies;
+	float flashFreezeCD;
 	void FlashFreeze()
 	{
 		foreach(GameObject x in countEnemiesInCollider.creepsInsideCollider)
@@ -55,6 +50,7 @@ public class FrostTower : Tower {
 				net.BeNetted(howLongToFreezeEnemies);
 			}
 		}
+		flashFreezeCD = Time.time + abilityCooldown;
 		DeactivateFlashFreezeIndicator();
 		// freeze some enemies. doesn't hit air units Air units will have their own path.
 	}
@@ -62,12 +58,12 @@ public class FrostTower : Tower {
 	{
 		if (Time.time < flashFreezeCD)
 			return;
-		flashFreezeReady = true;
+		abilityReady = true;
 		flashFreezeIndicator.SetActive(true);
 	}
 	public void DeactivateFlashFreezeIndicator() 
 	{
 		flashFreezeIndicator.SetActive(false);
-		flashFreezeReady = false;	
+		abilityReady = false;	
 	}
 }

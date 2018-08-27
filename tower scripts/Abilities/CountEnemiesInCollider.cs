@@ -12,7 +12,7 @@ public class CountEnemiesInCollider : MonoBehaviour {
 			{
 				if (!creepsInsideCollider.Contains(other.gameObject))
 				creepsInsideCollider.Add(other.gameObject);
-				Debug.Log("Found a pushableThing");
+				// Debug.Log("Found a pushableThing");
 			}
 	}
 

@@ -51,8 +51,10 @@ public class PlayerStats : MonoBehaviour {
 	}
 	void Lose()
 	{
+		if (playerHasLost == true)
+			return;
 		playerHasLost = true;
-		quitAndRestart.PauseGame(playerHasLost);
+		quitAndRestart.PauseGame(false);
 
 		// pause the game. 
 		// change the music.

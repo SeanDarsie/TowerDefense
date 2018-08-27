@@ -35,14 +35,14 @@ public class ZoomCamera : MonoBehaviour {
 	public void ZoomIn()
 	{
 		distFromCenter = Vector3.Distance(transform.position, transform.parent.position);
-		Debug.Log("ZoomIN()");
+		// Debug.Log("ZoomIN()");
 		if (distFromCenter <= minDist)
 			return;
 		transform.Translate(Vector3.forward * zoomSpeed * Time.deltaTime);
 	}
 	public void ZoomOut()
 	{
-		Debug.Log("ZoomOut()");
+		// Debug.Log("ZoomOut()");
 		distFromCenter = Vector3.Distance(transform.position, transform.parent.position);
 		if (distFromCenter >= maxDist)
 			return;

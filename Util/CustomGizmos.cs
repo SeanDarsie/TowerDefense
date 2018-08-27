@@ -6,10 +6,11 @@ using UnityEngine;
 public class CustomGizmos : MonoBehaviour {
 	public Color color1;
 	public Color color2;
+	public float size;
 	 void OnDrawGizmos() {
         Gizmos.color =  color1;
 		
-        Gizmos.DrawCube(transform.position, new Vector3(1, 1, 1));
+        Gizmos.DrawCube(transform.position, new Vector3(size, size, size));
 		 if (target != null) {
             Gizmos.color = color2;
             Gizmos.DrawLine(transform.position, target.position);

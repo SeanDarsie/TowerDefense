@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class Creep : MonoBehaviour, IPushable, IHittable, IStunnable, INettable, ISlowable {
+public abstract class Creep : MonoBehaviour, IPushable, IHittable, IStunnable, INettable, ISlowable, IShockable {
 
 	// protected abstract void dieHorribly();
 	// protected abstract void dieVictoriously();
@@ -12,9 +12,16 @@ public abstract class Creep : MonoBehaviour, IPushable, IHittable, IStunnable, I
 	[SerializeField] protected  int rewardForKilling;
 	[SerializeField] protected int moneyForKilling;
 	[SerializeField] protected  int health;
+	[SerializeField] protected  int maxHealth;
 	[SerializeField] protected  int damage;
 	[SerializeField] protected  float speed;
-	[SerializeField] protected  int armor;
+	[SerializeField] protected  int physicalResistance; 
+	[SerializeField] protected int shockResistance;
+	[SerializeField] protected int fireResistance;
+	[SerializeField] protected int frostResistance;
+	[SerializeField] protected int poisonResistance;
+	[SerializeField] protected int magicResistance;
+	[SerializeField] protected float frostResistanceToSlow; // the interface function beslowed will be affected by this
 	[SerializeField] protected CreepManager creepManager;
 	[SerializeField] protected PlayerStats playerStats;
 
@@ -27,10 +34,11 @@ public abstract class Creep : MonoBehaviour, IPushable, IHittable, IStunnable, I
 	}
 	
 	// Update is called once per frame
+	protected float timeSincePush;
 	void Update () {
 		//Debug.Log("Creep Update");
 		moveToNextSpot();
-		if (gotPushed)
+		if (gotPushed && Time.time >= timeSincePush)
 		{
 			RaycastHit hit;
 			Ray downRay = new Ray(transform.position, -transform.up);
@@ -40,7 +48,12 @@ public abstract class Creep : MonoBehaviour, IPushable, IHittable, IStunnable, I
 				{
 					GetComponent<Rigidbody>().useGravity = true;
 					// GetComponent<Rigidbody>().AddForce(directionOfPush);
-					this.enabled = false;
+					//this.enabled = false;
+				}
+				else
+				{
+					GetComponent<Rigidbody>().useGravity = false;
+					GetComponent<Rigidbody>().isKinematic = true;
 				}
 			}
 			else
@@ -74,9 +87,15 @@ public abstract class Creep : MonoBehaviour, IPushable, IHittable, IStunnable, I
 		Vector3 moveDir = transform.position - corners[cornersInd].position;
 		transform.Translate(-moveDir.normalized * speed * Time.deltaTime);
 	}
+	public int GetHealth() {return (health);}
+	public int GetMaxHealth() {return maxHealth;}
 	public  void SetHealth(int bonus)
 	{
 		health += bonus;
+	}
+	public void SetMaxHealth(int health)
+	{
+		maxHealth = health;
 	}
 	public void SetSpeed(float adjustment)
 	{
@@ -98,16 +117,41 @@ public abstract class Creep : MonoBehaviour, IPushable, IHittable, IStunnable, I
 		// move away from the tower that did the pushing. After a certain amount of seconds check if what is below isa  cloud in a certain amount of seconds
 		// how do i turn off this script or it's child class once it's supposed to fall. 
 		// preserve how long 
-		float howLongToBePushedBack = Time.time + howLongAmIPushedFor;
+		if (forceToBePushedBy == 0)
+			return;
+		timeSincePush = Time.time + howLongAmIPushedFor;
 		gotPushed = true;
 		GetComponent<Rigidbody>().isKinematic = false;
 		GetComponent<Rigidbody>().useGravity = true;
 		GetComponent<Rigidbody>().AddRelativeForce(directionOfPush * forceToBePushedBy);
 
 	}
-	public void TakeDamage(int damage)
+	public void TakeDamage(int damage, Tower.DamageType damageType)
 	{
-		damage -= armor;
+		switch(damageType)
+		{
+			case Tower.DamageType.PHYSICAL:
+				damage -= physicalResistance;
+				break;
+			case Tower.DamageType.LIGHTNING:
+				damage -= shockResistance;
+				break;
+			case Tower.DamageType.FROST:
+				damage -= frostResistance;
+				break;
+			case Tower.DamageType.FIRE:
+				damage -= fireResistance;
+				break;
+			case Tower.DamageType.POISON:
+				damage -= poisonResistance;
+				break;
+			case Tower.DamageType.MAGIC:
+				damage -= magicResistance;
+				break;
+			default:
+				damage -= physicalResistance;
+				break;
+		}
 		health -= damage;
 		if (health <= 0)
 			dieHorribly();
@@ -153,14 +197,57 @@ public abstract class Creep : MonoBehaviour, IPushable, IHittable, IStunnable, I
 		else
 			tempSpeed = speed;
 		speed *= amt;
-		Debug.Log("Creep Speed: " +speed);
+		// Debug.Log("Creep Speed: " +speed);
 		// speed = speed > amt ? (speed - amt) : 0f;
 
 		Invoke("ResetSpeed", 2.0f);
 	}
+	public void BeShocked(int shockDamage, int numberOfBounces)
+	{
+		TakeDamage(shockDamage, Tower.DamageType.LIGHTNING);
+		//DigitalRuby.LightningBolt.LightningBoltScript freeLightning = GameObject.FindWithTag("LightningBolt").GetComponent<DigitalRuby.LightningBolt.LightningBoltScript>();
+		//freeLightning.StartObject = gameObject;
+		BeNetted(0.5f); // maybe just do an aoe attack/stun
+		// if (numberOfBounces > 0)
+		// {
+		// 	StartCoroutine(ShockTheNextGuy(shockDamage, numberOfBounces - 1));
+		// }
+		// find the nex
+	}
+	IEnumerator ShockTheNextGuy(int shockDamage, int numberOfBounces)
+	{
+		yield return new WaitForSeconds(0.5f);
+		// find the closest shockable gameobject and call it's shockable function
+		float rangeFinder = 10000f;
+		GameObject target = null;
+		foreach(GameObject x in creepManager.getActiveCreeps())
+		{
+			float distanceToTower = Vector3.Distance(transform.position, x.transform.position);
+			if (distanceToTower < rangeFinder && x.activeInHierarchy && x != this)
+				{
+					target = x;
+					rangeFinder = distanceToTower;
+				}
+		}
+		if (target != null)
+			{
+				DigitalRuby.LightningBolt.LightningBoltScript freeLightning = GameObject.FindWithTag("LightningBolt").GetComponent<DigitalRuby.LightningBolt.LightningBoltScript>();
+				freeLightning.StartObject = gameObject;
+				freeLightning.EndObject = target;
+				target.GetComponent<IShockable>().BeShocked(shockDamage, numberOfBounces);
+			}
+		yield return null;
+	}
 	void ResetSpeed() {speed = tempSpeed;}
 
-
+	/// <summary>
+	/// OnMouseDown is called when the user has pressed the mouse button while
+	/// over the GUIElement or Collider.
+	/// </summary>
+	void OnMouseDown()
+	{
+		
+	}
 
 
 
