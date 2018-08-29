@@ -46,12 +46,12 @@ public class CameraBehaviour : MonoBehaviour {
 	{
 		if (transform.position.y >= maxHeight)
 			return;
-		transform.Translate(Vector3.up * moveSpeed * Time.deltaTime);
+		transform.Translate(Vector3.up * moveSpeed);
 	}
 	void MoveDown()
 	{
 		if (transform.position.y <= minHeight)
 			return;
-		transform.Translate(-Vector3.up * moveSpeed * Time.deltaTime);
+		transform.Translate(-Vector3.up * moveSpeed);
 	}
 }

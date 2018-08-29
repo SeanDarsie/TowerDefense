@@ -8,6 +8,7 @@ public class PlayerStats : MonoBehaviour {
 	[SerializeField] int health = 20;
    	[SerializeField] int startingHealth = 20;
 	public int monies = 50;
+	[SerializeField] int startingMonies;
 	[SerializeField] Text scoreTxt;
 	[SerializeField] Text lifeTxt;
 	[SerializeField] Text moniesTxt;
@@ -59,6 +60,10 @@ public class PlayerStats : MonoBehaviour {
 		// pause the game. 
 		// change the music.
 		// bring up a menu.
+	}	
+	public void ResetLevelHealthAndMonies()
+	{
+		monies = startingMonies;
+		health = startingHealth;
 	}
-
 }

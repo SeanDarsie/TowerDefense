@@ -56,4 +56,12 @@ public class CreepManager : MonoBehaviour {
 
 			 }
 	 }
+	 public void DestroyAllActiveCreeps()
+	 {
+		 foreach(GameObject x in activeCreeps)
+		 {
+			 Destroy(x);
+		 }
+		 activeCreeps.Clear();
+	 }
 }

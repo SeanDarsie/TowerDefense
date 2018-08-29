@@ -18,7 +18,12 @@ public class UItower : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		
+		if (player.monies >= towerPrefab.GetComponent<Tower>().GetPrice())
+		{
+			GetComponent<Button>().interactable = true;
+		}
+		else
+			GetComponent<Button>().interactable = false;
 	}
 	public void selectTower()
 	{

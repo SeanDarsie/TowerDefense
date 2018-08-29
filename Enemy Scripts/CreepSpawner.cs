@@ -15,6 +15,7 @@ public class CreepSpawner : MonoBehaviour {
 	[SerializeField] float timeBetweenIndividualCreeps;
 	float timeBetweenWaves;
 	bool canSendWave = true;
+	public bool isAcvive = false;
 	int names = 0;
 	// Use this for initialization
 	void Start () { // commment
@@ -25,8 +26,11 @@ public class CreepSpawner : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if (Time.time >= timeBetweenWaves && canSendWave == true)
+		if (isAcvive)
+		{
+			if (Time.time >= timeBetweenWaves && canSendWave == true)
 			sendCreepWave();
+		}
 	}
 
 	public void sendCreepWave()
