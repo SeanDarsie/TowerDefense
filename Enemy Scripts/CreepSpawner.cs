@@ -13,28 +13,32 @@ public class CreepSpawner : MonoBehaviour {
 	[SerializeField] float timeTillNextWave;
 	[SerializeField] int numberOfCreepsToSpawn;
 	[SerializeField] float timeBetweenIndividualCreeps;
+	[SerializeField] Transform[] movePointsforCreeps;
 	float timeBetweenWaves;
-	bool canSendWave = true;
-	public bool isAcvive = false;
+	[HideInInspector]
+	public bool canSendWave = true;
+	public bool isActive = false;
 	int names = 0;
 	// Use this for initialization
 	void Start () { // commment
 		CM = GameObject.FindWithTag("CreepManager").GetComponent<CreepManager>();
 		whereToSpawn = transform;
-		sendCreepWave();
+		// sendCreepWave();
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		if (isAcvive)
+		if (isActive)
 		{
+			// Debug.Log(canSendWave);
 			if (Time.time >= timeBetweenWaves && canSendWave == true)
-			sendCreepWave();
+				sendCreepWave();
 		}
 	}
 
 	public void sendCreepWave()
 	{
+		// Debug.Log("SendCreepWave()");
 		canSendWave = false;
 		// remove inactive creeps here. 
 		StartCoroutine(spawnCreepWave(wave, numberOfCreepsToSpawn, timeBetweenIndividualCreeps));
@@ -53,7 +57,8 @@ public class CreepSpawner : MonoBehaviour {
 		CM.addCreepToActiveList(x);
 		x.GetComponent<Creep>().SetHealth(wave * 10);
 		x.GetComponent<Creep>().SetMaxHealth(x.GetComponent<Creep>().GetHealth());	
-		x.GetComponent<Creep>().SetSpeed(Random.Range(-1, 1));		
+		x.GetComponent<Creep>().SetSpeed(Random.Range(-1, 1));
+		x.GetComponent<Creep>().corners = movePointsforCreeps;
 		x.name = "Goblin" + names.ToString();
 		names++;
 	}
@@ -62,6 +67,7 @@ public class CreepSpawner : MonoBehaviour {
 	{
 		for (int i = 0; i < creepsToSpawn; i++)
 		{
+			// Debug.Log(creepsToSpawn);
 			spawnSingleCreep(waveNumber);
 			yield return new WaitForSeconds(seconds);
 		}

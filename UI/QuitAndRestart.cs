@@ -8,7 +8,7 @@ public class QuitAndRestart : MonoBehaviour {
 	[SerializeField] GameObject AreYouSureQuitUI;
 	[SerializeField] GameObject AreYouSureRestartUI;
 	[SerializeField] GameObject startMeuUI;
-	[SerializeField] CreepSpawner currentLevelsCreepspawner;
+	[SerializeField] CreepSpawner[] currentLevelsCreepspawner;
 	bool playerHasLost = false;
 	
     private bool gamePaused = false;
@@ -18,6 +18,7 @@ public class QuitAndRestart : MonoBehaviour {
 		pauseMenuUI.SetActive(false);
 		AreYouSureQuitUI.SetActive(false);
 		AreYouSureRestartUI.SetActive(false);
+		currentLevelsCreepspawner = FindObjectsOfType<CreepSpawner>();
 		UnPauseGame();
 
 	}
@@ -38,8 +39,8 @@ public class QuitAndRestart : MonoBehaviour {
 		// Application.Quit(); Now handled elseWhere
 		// activate main menu. Reset Level(x);
 
-
-		Time.timeScale = 0f; // Temporary. needs to be replaced
+		// Debug.Log("Whay are you restarting the game");
+	
 
 		// bring up start menu
 		startMeuUI.SetActive(true);
@@ -48,21 +49,24 @@ public class QuitAndRestart : MonoBehaviour {
 		AreYouSureQuitUI.SetActive(false);
 
 		// reset Waves
-		currentLevelsCreepspawner.SetWave(0);
+		foreach(CreepSpawner x in currentLevelsCreepspawner)
+			x.SetWave(0);
 		FindObjectOfType<CreepManager>().DestroyAllActiveCreeps();
 		// FindObjectOfType<StartMenuManager>().StartGame();
 		FindObjectOfType<PlayerStats>().ResetLevelHealthAndMonies();
 		FindObjectOfType<TowerManager>().DestroyAllTowers();
+		Time.timeScale = 0f; // Temporary. needs to be replaced
 	}
 
-	public void RestartLevel()
+	public void RestartLevel() // restart current level. 
 	{
 		// 2 choices. Reload scene, or write a reset function in the level manager. i think i'm going to do the first one for now but i should put this on the TODO list
 		// TODO: write a reset function in the level manager. 
 		// Debug.Log("TODO: Implement a level reset function in the level manager!");
 		// SceneManager.LoadScene(SceneManager.GetActiveScene().name);
 		AreYouSureRestartUI.SetActive(false);
-		currentLevelsCreepspawner.SetWave(0);
+		foreach(CreepSpawner x in currentLevelsCreepspawner)
+			x.SetWave(0); // for this i could simply chalge all the waves of all the creep spawners 
 		// also need to destroy all creeps in the level.
 		FindObjectOfType<CreepManager>().DestroyAllActiveCreeps();
 		FindObjectOfType<StartMenuManager>().StartGame();

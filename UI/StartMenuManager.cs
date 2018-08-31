@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class StartMenuManager : MonoBehaviour {
 	[SerializeField] GameObject startMenuUI;
+	[SerializeField] GameObject[] allCameras;
+	[SerializeField] GameObject[] allCreepspawners;
 	PlayerStats playerStats;
 	
 	// Use this for initialization
@@ -18,32 +20,70 @@ public class StartMenuManager : MonoBehaviour {
 	}
 	 public void StartGame()
 	 {
-		 switch(FindObjectOfType<LevelChooser>().chosenLevel)
-		 {
-			 case 0:
-			 	// start the first level. For now we're just going to set Time.timeScale to 1 and turn off the start menu.
-				 // in future we will have a more complex level system.
-				Time.timeScale = 1.0f;
-				startMenuUI.SetActive(false);
-				playerStats.ResetLevelHealthAndMonies();
-				
-				break;
-			case 1:
-				break;
-			case 2:
-				break;
-			case 3:
-				break;
-			case 4:
-				break;
-			case 5:
-				break;
-			case 6:
-				break;
-			case 7:
-				break;
-			default:
-				break;
-		 }
+		int whatLevelIsIt = FindObjectOfType<LevelChooser>().chosenLevel;
+		Time.timeScale = 1.0f;
+		startMenuUI.SetActive(false);
+		playerStats.ResetLevelHealthAndMonies();
+
+		//Set all cameras to inactive before choosing the correct camera.
+		foreach (GameObject x in allCameras)
+			x.SetActive(false);
+		allCameras[whatLevelIsIt].SetActive(true); // first set all cameras to inactiv
+		// set all creepspawners to inactive and isactive to false so they don't spawn minions
+		foreach (GameObject creepSpawner in allCreepspawners)
+		{
+			creepSpawner.GetComponent<CreepSpawner>().isActive = false;
+			creepSpawner.SetActive(false);
+		}
+		allCreepspawners[whatLevelIsIt].SetActive(true);
+
+		allCreepspawners[whatLevelIsIt].GetComponent<CreepSpawner>().isActive = true;
+		allCreepspawners[whatLevelIsIt].GetComponent<CreepSpawner>().canSendWave = true;
+	
+		// each tower has a creepspawner. A CameraHolder. What else??? 
+
+		//  switch(FindObjectOfType<LevelChooser>().chosenLevel)
+		//  {
+			 
+		// 	 case 0:
+		// 	 	// start the first level. For now we're just going to set Time.timeScale to 1 and turn off the start menu.
+		// 		 // in future we will have a more complex level system.
+		// 		Time.timeScale = 1.0f;
+		// 		startMenuUI.SetActive(false);
+		// 		playerStats.ResetLevelHealthAndMonies();
+								
+		// 		//Set all cameras to inactive before choosing the correct camera.
+		// 		foreach (GameObject x in allCameras)
+		// 			x.SetActive(false);
+		// 		allCameras[whatLevelIsIt].SetActive(true); // first set all cameras to inactive
+
+
+		// 		// set all creepspawners to inactive and isactive to false so they don't spawn minions
+		// 		foreach (GameObject creepSpawner in allCreepspawners)
+		// 		{
+		// 			creepSpawner.GetComponent<CreepSpawner>().isActive = false;
+		// 			creepSpawner.SetActive(false);
+		// 		}
+		// 		allCreepspawners[whatLevelIsIt].SetActive(true);
+		// 		allCreepspawners[whatLevelIsIt].GetComponent<CreepSpawner>().isActive = true;
+		// 		// each tower has a creepspawner. A CameraHolder. What else??? 
+		// 		break;
+		// 	case 1:
+		// 		break;
+		// 	case 2:
+		// 		break;
+		// 	case 3:
+		// 		break;
+		// 	case 4:
+		// 		break;
+		// 	case 5:
+		// 		break;
+		// 	case 6:
+		// 		break;
+		// 	case 7:
+		// 		break;
+		// 	default:
+		// 		break;
+		//  }
 	 }
 }

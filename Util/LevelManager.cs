@@ -12,6 +12,7 @@ public class LevelManager : MonoBehaviour {
 	[SerializeField] Transform[] corners5;
 	
 	[SerializeField] int levelIndex;
+	public int whatLevelIsSelected; //WAIT I CAN JUST HAVE THE CREEPSPAWNER DO IT
 
 	public Transform[] getCoreners()
 	{

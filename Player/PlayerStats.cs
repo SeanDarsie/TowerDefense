@@ -35,11 +35,7 @@ public class PlayerStats : MonoBehaviour {
 		score += x;
 		scoreTxt.text = "Score: " + score.ToString();
 	}
-	// public void ResetHealth() // maybe this can be a reset for teh whole level.
-	// {
-	// 	health = startingHealth;
-	// 	lifeTxt.text = "Life: " + health.ToString();
-	// }
+
 	public void AdjustHealth(int someAmount)
 	{
 		health += someAmount;
@@ -65,5 +61,13 @@ public class PlayerStats : MonoBehaviour {
 	{
 		monies = startingMonies;
 		health = startingHealth;
+		UpdateScore(0);
+		AdjustHealth(0);
+		AdjustMonies(0);
 	}
+		// public void ResetHealth() // maybe this can be a reset for teh whole level.
+	// {
+	// 	health = startingHealth;
+	// 	lifeTxt.text = "Life: " + health.ToString();
+	// }
 }

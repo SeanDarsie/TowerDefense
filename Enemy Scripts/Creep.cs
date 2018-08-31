@@ -7,7 +7,7 @@ public abstract class Creep : MonoBehaviour, IPushable, IHittable, IStunnable, I
 	// protected abstract void dieHorribly();
 	// protected abstract void dieVictoriously();
 
-	[SerializeField] protected Transform[] corners;
+	[SerializeField] public Transform[] corners;
 	protected int cornersInd = 0;
 	[SerializeField] protected  int rewardForKilling;
 	[SerializeField] protected int moneyForKilling;
@@ -29,7 +29,7 @@ public abstract class Creep : MonoBehaviour, IPushable, IHittable, IStunnable, I
 	protected void Start () {
 		creepManager = FindObjectOfType<CreepManager>();
 		playerStats = FindObjectOfType<PlayerStats>();
-		corners = FindObjectOfType<LevelManager>().getCoreners();
+		// corners = FindObjectOfType<LevelManager>().getCoreners();
 		creepManager.addCreepToActiveList(gameObject);
 	}
 	
@@ -41,7 +41,7 @@ public abstract class Creep : MonoBehaviour, IPushable, IHittable, IStunnable, I
 		if (gotPushed && Time.time >= timeSincePush)
 		{
 			RaycastHit hit;
-			Ray downRay = new Ray(transform.position, -transform.up);
+			Ray downRay = new Ray(transform.position, -Vector3.up);
 			if (Physics.Raycast(downRay, out hit, 100))
 			{
 				if (hit.collider.tag == "Cloud")

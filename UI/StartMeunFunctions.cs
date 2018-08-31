@@ -4,9 +4,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class StartMeunFunctions : MonoBehaviour,IPointerEnterHandler,IPointerExitHandler,IPointerClickHandler {
+public class StartMeunFunctions : MonoBehaviour,IPointerEnterHandler,IPointerExitHandler,IPointerDownHandler,IPointerUpHandler {
 	Text myText;
-	public enum MenuFunction {START, QUIT, OPTIONS, CREDITS}
+	public enum MenuFunction {START, QUIT, OPTIONS, CREDITS, LEVEL}
 	public MenuFunction menuFunction;
 
 	delegate void MyMenuFucntion();
@@ -17,6 +17,8 @@ public class StartMeunFunctions : MonoBehaviour,IPointerEnterHandler,IPointerExi
 	[SerializeField] Color pressedColor;
 	[SerializeField] Image line1;
 	[SerializeField] Image line2;
+	[Tooltip("What level to activate with this button")]
+	[SerializeField] int level;
 	// Use this for initialization
 	void Start () {
 		myText = GetComponentInChildren<Text>();
@@ -24,18 +26,21 @@ public class StartMeunFunctions : MonoBehaviour,IPointerEnterHandler,IPointerExi
 		switch(menuFunction)
 		{
 			case StartMeunFunctions.MenuFunction.START:
-				Debug.Log("My delegate function starts the game");
+				// Debug.Log("My delegate function starts the game");
 				myMenuFunction = FindObjectOfType<StartMenuManager>().StartGame;
 				break;
 			case StartMeunFunctions.MenuFunction.OPTIONS:
 				myMenuFunction = quitGame;
-				Debug.Log("My delegate function opens Options Menu");
+				// Debug.Log("My delegate function opens Options Menu");
 				break;
 			case StartMeunFunctions.MenuFunction.QUIT:
-				Debug.Log("My delegate function Quits the game");
+				// Debug.Log("My delegate function Quits the game");
 				break;
 			case StartMeunFunctions.MenuFunction.CREDITS:
 				Debug.Log("My delegate function shows credits");
+				break;
+			case StartMeunFunctions.MenuFunction.LEVEL:
+				Debug.Log("startMenuFunctions button for choosing a level");
 				break;
 			default:
 				break;
@@ -52,6 +57,7 @@ public class StartMeunFunctions : MonoBehaviour,IPointerEnterHandler,IPointerExi
          myText.color = highlightedColor; //Or however you do your color
 		 line1.enabled = true;
 		 line2.enabled = true;
+		 SwitchDelegateFunction();
 		//  Debug.Log(eventData.pointerEnter);
      }
  
@@ -60,14 +66,56 @@ public class StartMeunFunctions : MonoBehaviour,IPointerEnterHandler,IPointerExi
          myText.color = normalColor; //Or however you do your color
 		 line1.enabled = false;
 		 line2.enabled = false;
+		 myMenuFunction = null;
      }
-	 public void OnPointerClick(PointerEventData eventData)
+	 public void OnPointerUp(PointerEventData eventData)
+	 {
+		myText.color = normalColor; //Or however you do your color
+		 line1.color = normalColor;
+		 line2.color =	normalColor;
+		 line1.enabled = false;
+		 line2.enabled = false;
+		 if (myMenuFunction != null)
+			myMenuFunction();
+	 }
+	 public void OnPointerDown(PointerEventData eventData)
 	 {
 		 myText.color = pressedColor;
-		 myMenuFunction();
+		 line1.color = pressedColor;
+		 line2.color = pressedColor;
 	 }
 	void quitGame()
 	{
 		Application.Quit();
+	}
+	void ChooseALevel()
+	{
+		// this function will set the level chooser integer called "ChosenLevel" to whatever the current instace of theis Class contains 
+		FindObjectOfType<LevelChooser>().chosenLevel = level;
+	}
+	void SwitchDelegateFunction()
+	{
+		switch(menuFunction)
+		{
+			case StartMeunFunctions.MenuFunction.START:
+				// Debug.Log("My delegate function starts the game");
+				myMenuFunction = FindObjectOfType<StartMenuManager>().StartGame;
+				break;
+			case StartMeunFunctions.MenuFunction.OPTIONS:
+				myMenuFunction = quitGame;
+				// Debug.Log("My delegate function opens Options Menu");
+				break;
+			case StartMeunFunctions.MenuFunction.QUIT:
+				// Debug.Log("My delegate function Quits the game");
+				break;
+			case StartMeunFunctions.MenuFunction.CREDITS:
+				Debug.Log("My delegate function shows credits");
+				break;
+			case StartMeunFunctions.MenuFunction.LEVEL:
+				Debug.Log("startMenuFunctions button for choosing a level");
+				break;
+			default:
+				break;
+		}
 	}
 }
