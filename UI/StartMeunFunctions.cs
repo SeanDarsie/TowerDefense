@@ -34,6 +34,7 @@ public class StartMeunFunctions : MonoBehaviour,IPointerEnterHandler,IPointerExi
 				// Debug.Log("My delegate function opens Options Menu");
 				break;
 			case StartMeunFunctions.MenuFunction.QUIT:
+				myMenuFunction = quitGame;
 				// Debug.Log("My delegate function Quits the game");
 				break;
 			case StartMeunFunctions.MenuFunction.CREDITS:

@@ -7,11 +7,13 @@ public class StartMenuManager : MonoBehaviour {
 	[SerializeField] GameObject[] allCameras;
 	[SerializeField] GameObject[] allCreepspawners;
 	PlayerStats playerStats;
+	MusicManager musicManager;
 	
 	// Use this for initialization
 	void Start () {
 		Time.timeScale = 0f;
 		playerStats = FindObjectOfType<PlayerStats>();
+		musicManager = FindObjectOfType<MusicManager>();
 	}
 	
 	// Update is called once per frame
@@ -24,6 +26,7 @@ public class StartMenuManager : MonoBehaviour {
 		Time.timeScale = 1.0f;
 		startMenuUI.SetActive(false);
 		playerStats.ResetLevelHealthAndMonies();
+		musicManager.StartStageMusic();
 
 		//Set all cameras to inactive before choosing the correct camera.
 		foreach (GameObject x in allCameras)
@@ -39,6 +42,7 @@ public class StartMenuManager : MonoBehaviour {
 
 		allCreepspawners[whatLevelIsIt].GetComponent<CreepSpawner>().isActive = true;
 		allCreepspawners[whatLevelIsIt].GetComponent<CreepSpawner>().canSendWave = true;
+		FindObjectOfType<QuitAndRestart>().playerHasLost = false;
 	
 		// each tower has a creepspawner. A CameraHolder. What else??? 
 

@@ -27,6 +27,16 @@ public class TowerPlacingScript : MonoBehaviour {
 	/// </summary>
 	void Update()
 	{
+		if (Input.GetMouseButtonDown(1) && towerSelected == true)
+		{
+			towerModel.SetActive(false);
+			towerSelected = false;
+		}
+		if (towerSelected == true && towerPrefab.GetComponent<Tower>().GetPrice() > FindObjectOfType<PlayerStats>().monies)
+		{
+			towerModel.SetActive(false);
+			towerSelected = false;
+		}
 		// if (Input.GetMouseButtonDown(0))
 		// 	{	RaycastHit hit;
 		// 		if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, 1000))

@@ -15,6 +15,7 @@ public abstract class Creep : MonoBehaviour, IPushable, IHittable, IStunnable, I
 	[SerializeField] protected  int maxHealth;
 	[SerializeField] protected  int damage;
 	[SerializeField] protected  float speed;
+	[SerializeField] protected float turnSpeed = 5.0f;
 	[SerializeField] protected  int physicalResistance; 
 	[SerializeField] protected int shockResistance;
 	[SerializeField] protected int fireResistance;
@@ -37,7 +38,9 @@ public abstract class Creep : MonoBehaviour, IPushable, IHittable, IStunnable, I
 	protected float timeSincePush;
 	void Update () {
 		//Debug.Log("Creep Update");
+		LookAtDestination();
 		moveToNextSpot();
+		
 		if (gotPushed && Time.time >= timeSincePush)
 		{
 			RaycastHit hit;
@@ -85,8 +88,24 @@ public abstract class Creep : MonoBehaviour, IPushable, IHittable, IStunnable, I
 			}
 		}
 		Vector3 moveDir = transform.position - corners[cornersInd].position;
-		transform.Translate(-moveDir.normalized * speed * Time.deltaTime);
+		transform.Translate(-moveDir.normalized * speed * Time.deltaTime, Space.World);
 	}
+	protected void LookAtDestination()
+	{
+  
+        Vector3 targetDir = corners[cornersInd].position - transform.position;
+
+        // The step size is equal to speed times frame time.
+        float step = turnSpeed * Time.deltaTime;
+
+        Vector3 newDir = Vector3.RotateTowards(transform.forward, targetDir, step, 0.0f);
+        // Debug.DrawRay(transform.position, newDir, Color.red);
+
+        // Move our position a step closer to the target.
+        transform.rotation = Quaternion.LookRotation(newDir);
+
+	}
+
 	public int GetHealth() {return (health);}
 	public int GetMaxHealth() {return maxHealth;}
 	public  void SetHealth(int bonus)
@@ -128,6 +147,8 @@ public abstract class Creep : MonoBehaviour, IPushable, IHittable, IStunnable, I
 	}
 	public void TakeDamage(int damage, Tower.DamageType damageType)
 	{
+		if (health <= 0)
+			return;
 		switch(damageType)
 		{
 			case Tower.DamageType.PHYSICAL:

@@ -24,6 +24,7 @@ public class ShockTower : Tower {
 		}	
 	}
 	[SerializeField] GameObject lightningPrefab;
+	[SerializeField] int lightningStrikes;
 	float shotCD;
 	float chainLightningCD;
 	public override void Fire()
@@ -46,7 +47,7 @@ public class ShockTower : Tower {
 		DigitalRuby.LightningBolt.LightningBoltScript lightningBolt = lightningPrefab.GetComponent<DigitalRuby.LightningBolt.LightningBoltScript>();
 		lightningBolt.EndObject = target.gameObject;
 		lightningPrefab.SetActive(true);
-		StartCoroutine(LightingFiringSequence(target.gameObject, 5));
+		StartCoroutine(LightingFiringSequence(target.gameObject, lightningStrikes));
 		// so now we have a target. we can pass that target to a coroutine that will fire x number of shots over some seconds and presumably show some cool lightning effect while it does it. for now i'm just going to throw shit at it i think
 		// i think i'm going to start a coroutine to do attacks over a period of time. 
 		// Debug.Log("Unimplimented Fire() in Shock tower");

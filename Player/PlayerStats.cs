@@ -51,7 +51,7 @@ public class PlayerStats : MonoBehaviour {
 		if (playerHasLost == true)
 			return;
 		playerHasLost = true;
-		quitAndRestart.PauseGame(false);
+		quitAndRestart.PauseGame(true);
 
 		// pause the game. 
 		// change the music.
@@ -59,6 +59,7 @@ public class PlayerStats : MonoBehaviour {
 	}	
 	public void ResetLevelHealthAndMonies()
 	{
+		playerHasLost = false;
 		monies = startingMonies;
 		health = startingHealth;
 		UpdateScore(0);

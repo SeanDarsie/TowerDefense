@@ -75,7 +75,7 @@ public class TowerBlockScript : MonoBehaviour {
 			return;
 		occupied = true;
 		TowerInstance = Instantiate(towerPrefab, whereToPlaceTower.position, whereToPlaceTower.rotation);
-		towerPlacer.towerSelected = false; //???? maybe we could let them place a bunch at once. 
+		//towerPlacer.towerSelected = false; //???? maybe we could let them place a bunch at once. 
 		towerModel.SetActive(false);
 		player.AdjustMonies(-towerPlacer.selectedTowerPrice);// monies -= towerPlacer.selectedTowerPrice;
 
