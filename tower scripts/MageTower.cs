@@ -60,9 +60,9 @@ public class MageTower : Tower {
 		{
 			Vector3 someDirection = x.transform.position - transform.position;
 			// Debug.Log("someDirection: " + someDirection);
-			x.GetComponent<IPushable>().BePushed(someDirection);
+			// x.GetComponent<IPushable>().BePushed(someDirection);
 			// x.GetComponent<Creep>().enabled = false;
-			x.GetComponent<IPushable>().BePushed(someDirection);
+			x.GetComponent<IPushable>().BePushed(-someDirection);
 		}
 		DeactivateForcePushIndicator();
 	}

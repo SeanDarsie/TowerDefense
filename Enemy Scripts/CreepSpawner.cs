@@ -55,7 +55,7 @@ public class CreepSpawner : MonoBehaviour {
 		// If we start repeating the same enemies then we need to start incrimenting their health higher and higher. this is where that should be done
 		GameObject x = Instantiate(creeps[wave % numberOfUniqueCreepTypes], whereToSpawn.position, whereToSpawn.rotation) as GameObject;
 		CM.addCreepToActiveList(x);
-		x.GetComponent<Creep>().SetHealth(wave * 10);
+		x.GetComponent<Creep>().SetHealth(wave * x.GetComponent<Creep>().healthIncrement);
 		x.GetComponent<Creep>().SetMaxHealth(x.GetComponent<Creep>().GetHealth());	
 		x.GetComponent<Creep>().SetSpeed(Random.Range(-1, 1));
 		x.GetComponent<Creep>().corners = movePointsforCreeps;

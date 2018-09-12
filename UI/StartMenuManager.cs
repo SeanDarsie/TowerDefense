@@ -6,6 +6,7 @@ public class StartMenuManager : MonoBehaviour {
 	[SerializeField] GameObject startMenuUI;
 	[SerializeField] GameObject[] allCameras;
 	[SerializeField] GameObject[] allCreepspawners;
+	[SerializeField] GameObject[] allTowers;
 	PlayerStats playerStats;
 	MusicManager musicManager;
 	
@@ -31,7 +32,13 @@ public class StartMenuManager : MonoBehaviour {
 		//Set all cameras to inactive before choosing the correct camera.
 		foreach (GameObject x in allCameras)
 			x.SetActive(false);
-		allCameras[whatLevelIsIt].SetActive(true); // first set all cameras to inactiv
+		allCameras[whatLevelIsIt].SetActive(true); 
+
+		// Set all the towers to inactive and then set the current levels tower to active
+		foreach (GameObject x in allTowers)
+			x.SetActive(false);
+		allTowers[whatLevelIsIt].SetActive(true);
+
 		// set all creepspawners to inactive and isactive to false so they don't spawn minions
 		foreach (GameObject creepSpawner in allCreepspawners)
 		{

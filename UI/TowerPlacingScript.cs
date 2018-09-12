@@ -51,9 +51,20 @@ public class TowerPlacingScript : MonoBehaviour {
 	}
 	public void ShowTowerStats(GameObject tower)
 	{
-		upgradeTowerButton.interactable = true;
+		if (towerToUpgrade == tower)
+		{
+			CloseTowerUI();
+			towerToUpgrade = null;
+			return;
+		}
+		towerModel.SetActive(false);
+		towerSelected = false;
 		sellTowerButton.interactable = true;
 		Tower currentTower = tower.GetComponent<Tower>();
+		if (FindObjectOfType<PlayerStats>().monies >= currentTower.GetUpgradePrice())
+			upgradeTowerButton.interactable = true;
+		else
+			upgradeTowerButton.interactable = false;
 		towerName.text = "Level " + currentTower.GetLevel().ToString() + " " + currentTower.GetName();
 		towerDPS.text = "DPS " + currentTower.GetDPS().ToString("0.00");
 		towerUpgrade.text = "Upgrade: " + currentTower.GetUpgradePrice().ToString();
@@ -66,7 +77,7 @@ public class TowerPlacingScript : MonoBehaviour {
 	{
 		// we need to call the curent towers upgrade function, then maybe call show tower stats after that
 		towerToUpgrade.GetComponent<Tower>().UpgradeTower();
-		ShowTowerStats(towerToUpgrade);
+		UpdateTowerStats(towerToUpgrade);
 	}
 	public void SellSelectedTower()
 	{
@@ -79,6 +90,21 @@ public class TowerPlacingScript : MonoBehaviour {
 	{
 		sellTowerButton.interactable = false;
 		upgradeTowerButton.interactable = false;
+	}
+	void UpdateTowerStats(GameObject tower)
+	{
+		if (FindObjectOfType<PlayerStats>().monies >= tower.GetComponent<Tower>().GetUpgradePrice())
+			upgradeTowerButton.interactable = true;
+		else
+			upgradeTowerButton.interactable = false;
+		sellTowerButton.interactable = true;
+		Tower currentTower = tower.GetComponent<Tower>();
+		towerName.text = "Level " + currentTower.GetLevel().ToString() + " " + currentTower.GetName();
+		towerDPS.text = "DPS " + currentTower.GetDPS().ToString("0.00");
+		towerUpgrade.text = "Upgrade: " + currentTower.GetUpgradePrice().ToString();
+		towerSell.text = "Sell: "+ currentTower.GetSellPrice().ToString();
+		towerLevel.text = "Level: " + currentTower.GetLevel().ToString();
+		towerToUpgrade = tower;
 	}
 	// need a function to sell selected tower or upgrade selected tower
 }

@@ -61,7 +61,7 @@ public class QuitAndRestart : MonoBehaviour {
 		FindObjectOfType<TowerManager>().DestroyAllTowers();
 		// Time.timeScale = 0f; // Temporary. needs to be replaced. actually dont nee
 
-		musicManager.GameUnPausedMusicVolUp(); // put the music volume back up
+		// musicManager.GameUnPausedMusicVolUp(); // put the music volume back up
 		musicManager.StartMenuMusic();
 	}
 
@@ -82,8 +82,8 @@ public class QuitAndRestart : MonoBehaviour {
 	{	
 		if (hasPlayerLost == true)
 			musicManager.StartDeathMusic();
-		else
-			musicManager.GamePausedMusicVolDown();
+		// else
+		// 	musicManager.GamePausedMusicVolDown();
 		playerHasLost = hasPlayerLost;
 		gamePaused = true;
 		pauseMenuUI.SetActive(true);

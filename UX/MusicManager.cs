@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class MusicManager : MonoBehaviour {
 	AudioSource audioSource;
@@ -12,16 +13,20 @@ public class MusicManager : MonoBehaviour {
 	[SerializeField] AudioClip stageMainLoop;
 	[SerializeField][Tooltip("Death Intro Clip")] AudioClip stageDeathIntroClip;
 	[SerializeField] AudioClip stageDeathLoopClip;
+	[SerializeField] Slider volumeSlider;
+	AudioClip clipToPlayNext;
 	public float minVolInMenu;
 	public float maxVol;
 	// [SerializeField] AudioClip stageVictoryClip; // this one is for much later. i don't want to add a random victory condition yet justr for the sake of completing the game before i even know what it's about.
-	
+
 	void Start () {
 		audioSource = GetComponent<AudioSource>();
-		// audioSource.clip = menuMusicIntro;
-		StartMenuMusic();
-	}
-	
+		audioSource.clip = menuMusicIntro;
+		audioSource.Play();
+		Invoke("StartMainMenuMainLoop", menuMusicIntro.length);
+		// StartMenuMusic();
+		volumeSlider.onValueChanged.AddListener( delegate { AdjustVol(volumeSlider.value); } ); 
+ 	}
 	
 	void Update () {
 		
@@ -32,19 +37,24 @@ public class MusicManager : MonoBehaviour {
 	public void StartMenuMusic()
 	{
 		CancelInvoke();
-		audioSource.clip = menuMusicIntro;
+		// audioSource.clip = menuMusicIntro;
+		clipToPlayNext = menuMusicIntro;
 		audioSource.loop = false;
-		audioSource.Play();
+		// audioSource.Play();
+		StartCoroutine(MusicTransition(clipToPlayNext));
 		Invoke("StartMainMenuMainLoop", menuMusicIntro.length);
 	}
 	public void StartStageMusic()
 	{
+		// Debug.Log("play starting Music");
 		CancelInvoke();
-		audioSource.clip = stageIntroMusic;
-		audioSource.Play();
+		// audioSource.clip = stageIntroMusic;
+		clipToPlayNext = stageIntroMusic;
+		// audioSource.Play();
 		audioSource.loop = false;
+		StartCoroutine(MusicTransition(clipToPlayNext));
 		 // start the main stage loop once the introclip is done
-		Invoke("StartMainStageLoop", stageIntroMusic.length); // AudioClip.length = The length in seconds of the clip
+		Invoke("StartMainStageLoop", stageIntroMusic.length - 1.0f) ; // AudioClip.length = The length in seconds of the clip
 	}
 	public void StartDeathMusic()
 	{
@@ -130,6 +140,7 @@ public class MusicManager : MonoBehaviour {
 		// change audio clip.
 		audioSource.clip = newClip;
 		audioSource.Play();
+		audioSource.loop = true;
 		while (audioSource.volume < maxVol)
 		{
 			audioSource.volume += 0.05f;

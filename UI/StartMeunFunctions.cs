@@ -30,7 +30,7 @@ public class StartMeunFunctions : MonoBehaviour,IPointerEnterHandler,IPointerExi
 				myMenuFunction = FindObjectOfType<StartMenuManager>().StartGame;
 				break;
 			case StartMeunFunctions.MenuFunction.OPTIONS:
-				myMenuFunction = quitGame;
+				// myMenuFunction = quitGame;
 				// Debug.Log("My delegate function opens Options Menu");
 				break;
 			case StartMeunFunctions.MenuFunction.QUIT:
@@ -103,10 +103,10 @@ public class StartMeunFunctions : MonoBehaviour,IPointerEnterHandler,IPointerExi
 				myMenuFunction = FindObjectOfType<StartMenuManager>().StartGame;
 				break;
 			case StartMeunFunctions.MenuFunction.OPTIONS:
-				myMenuFunction = quitGame;
 				// Debug.Log("My delegate function opens Options Menu");
 				break;
 			case StartMeunFunctions.MenuFunction.QUIT:
+				myMenuFunction = quitGame;
 				// Debug.Log("My delegate function Quits the game");
 				break;
 			case StartMeunFunctions.MenuFunction.CREDITS:

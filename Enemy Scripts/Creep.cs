@@ -8,11 +8,12 @@ public abstract class Creep : MonoBehaviour, IPushable, IHittable, IStunnable, I
 	// protected abstract void dieVictoriously();
 
 	[SerializeField] public Transform[] corners;
-	protected int cornersInd = 0;
+	
 	[SerializeField] protected  int rewardForKilling;
 	[SerializeField] protected int moneyForKilling;
 	[SerializeField] protected  int health;
 	[SerializeField] protected  int maxHealth;
+	[SerializeField] public int healthIncrement; // public so it can be used by the creepspawner. Serialized so it looks more pretty!
 	[SerializeField] protected  int damage;
 	[SerializeField] protected  float speed;
 	[SerializeField] protected float turnSpeed = 5.0f;
@@ -22,9 +23,10 @@ public abstract class Creep : MonoBehaviour, IPushable, IHittable, IStunnable, I
 	[SerializeField] protected int frostResistance;
 	[SerializeField] protected int poisonResistance;
 	[SerializeField] protected int magicResistance;
-	[SerializeField] protected float frostResistanceToSlow; // the interface function beslowed will be affected by this
+	[SerializeField] protected float frostResistanceToSlow; // the interface function beslowed will be affected by this ????? percentage i guess
 	[SerializeField] protected CreepManager creepManager;
 	[SerializeField] protected PlayerStats playerStats;
+	protected int cornersInd = 0;
 
 	// Use this for initialization
 	protected void Start () {
@@ -67,11 +69,7 @@ public abstract class Creep : MonoBehaviour, IPushable, IHittable, IStunnable, I
 			}
 		}
 		if (transform.position.y <= -10f)
-			{
-				damage = 0;
-				playerStats.AdjustMonies(moneyForKilling);
-				dieVictoriously();
-			}
+				dieHorribly();
 	}
 	
 	protected void moveToNextSpot()
@@ -122,8 +120,10 @@ public abstract class Creep : MonoBehaviour, IPushable, IHittable, IStunnable, I
 	}
 	protected void dieVictoriously()
 	{
-		// remove 1 life from the player. 
-		// creepManager.ReMakeList();
+		// GetComponent<Rigidbody>().useGravity = true;
+		// GetComponent<Rigidbody>().isKinematic = false;
+		// GetComponent<Rigidbody>().AddRelativeForce(Random.Range(-500, 500),Random.Range(-500, 500),Random.Range(-500, 500));
+		
 		creepManager.removeCreep(gameObject);
 		creepManager.ReMakeList();
 		playerStats.AdjustHealth(-damage);
