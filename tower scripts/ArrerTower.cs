@@ -10,42 +10,16 @@ public class ArrerTower : Tower {
 	void Update () {
 		if (abilityReady)
 		{
-			// line = GetComponent<LineRenderer>();
-
-			// 	// RaycastHit hit;
-                
-            //     // if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, 100)) {
-			// 	// 	pos = hit.point;
-			// 	// 	pos.y = 5.0f;
-			// 	// 	line.SetPosition(0, pos.normalized * 5.0f);
-            //     // }
-		
-			// RaycastHit hit;
-			// if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, 100000))
-			// {
-			// 	// netThrowDir = hit.poinst - transform.position;
-			// 	netThrowDir = hit.point;
-			// 	// netThrowDir = transform.position - Input.mousePosition; // points from tower to mouse
-			// 	netThrowDir.y = transform.position.y;
-
-			// 	// RaycastHit hit;
-
-			// 	line.SetPosition(1, netThrowDir/*hit.point*/);
-			// 	line.SetPosition(0, transform.position);
-			// }
-			// // draw a line from the tower to the mouse.
 			if (Input.GetMouseButtonDown(0))
 				throwNet();
 			if (Input.GetMouseButtonDown(1))
-				deactivateNetIndicator();
+				DeactivateAbilityIndicator();
 		}
 		if (Time.time >= shotCD)
 		{
 			Fire();
 		}
 	}
-	[Header("Basic Attack")]
-	private float shotCD;
 
     public override void Fire()
     {
@@ -124,31 +98,31 @@ public class ArrerTower : Tower {
 	[SerializeField] GameObject netObject;
 	[SerializeField] Transform throwPos;
 	[SerializeField] float forceOfThrow;
-	[SerializeField] GameObject netIndicator;
+	[SerializeField] GameObject netIndicator; // AbilityIndicator in TowerClass
 	public void throwNet() // simply needs to throw the net in the netThrowDir 
 	{
-		shotCooldown = Time.time + abilityCooldown;
+		abilityCountdown = Time.time + abilityCooldown;
 		abilityReady = false;
 		GameObject throwthis = Instantiate(netObject, netIndicator.transform.position, netIndicator.transform.rotation);
 		
 		throwthis.GetComponent<Rigidbody>().AddRelativeForce(0,0,forceOfThrow);
-		deactivateNetIndicator();
+		DeactivateAbilityIndicator();
 	}
 
-	private float shotCooldown;
-	public void activateNetIndicator()
-	{
-		if (Time.time < shotCooldown)
-			return;
-		abilityReady = true;
-		netIndicator.SetActive(true);
-	}
-	public void deactivateNetIndicator() 
-	{
-		netIndicator.SetActive(false);
-		abilityReady = false;
+	// private float shotCooldown;
+	// public void activateNetIndicator() // activateAbilityIndicator in Tower class
+	// {
+	// 	if (Time.time < shotCooldown)
+	// 		return;
+	// 	abilityReady = true;
+	// 	netIndicator.SetActive(true); 
+	// }
+	// public void deactivateNetIndicator() // DeactivateAbilityIndicator in Tower class
+	// {
+	// 	netIndicator.SetActive(false);
+	// 	abilityReady = false;
 
-	}
+	// }
 
 }
 	

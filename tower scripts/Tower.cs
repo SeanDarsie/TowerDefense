@@ -26,21 +26,29 @@ abstract public class Tower : MonoBehaviour {
 	[SerializeField] protected  int sellPrice;
 	[SerializeField] protected Transform target;
 	[SerializeField] protected GameObject projectile;
+	[SerializeField] protected GameObject abilityIndicator;
 	[SerializeField] protected Transform firePos;
 	[SerializeField] protected 	CreepManager creepManager;
 	[SerializeField] protected float abilityCooldown;
 	[SerializeField] protected bool abilityReady = false;
+	protected float shotCD;
 	// Use this for initialization
 	protected void Start () {
 		creepManager = FindObjectOfType<CreepManager>();
 		player = FindObjectOfType<PlayerStats>();	
 	}
+	
+	// =------------------------- Getters ------------------------= //
+	public float GetRange() {return range;}
+	public int GetDamage() {return damage;}
 	public int GetPrice() {return price;}
 	public int GetLevel() {return level;}
 	public int GetUpgradePrice() {return upgradePrice;}
 	public int GetSellPrice() {return sellPrice;}
 	public string GetName() {return towerName;}
 	public float GetDPS(){return ((float)(damage) * reloadSpeed);}
+	// =------------------------- Getters ------------------------= //
+
 	public void SellTower() {
 		player.AdjustMonies(sellPrice);
 		Debug.Log("Tower class: SellPrice: " + sellPrice);
@@ -65,6 +73,19 @@ abstract public class Tower : MonoBehaviour {
 		upgradePrice *= 2;
 		// sellPrice += 1 > upgradePrice/2 ? 1 : upgradePrice/2; 
 		damageUpgrade += 1 > damageUpgrade/2 ? 1 : damageUpgrade/2; 
+	}
+	protected float abilityCountdown;
+	public void ActivateAbilityIndicator() // activateAbilityIndicator in Tower class
+	{
+		if (Time.time < abilityCountdown)
+			return;
+		abilityReady = true;
+		abilityIndicator.SetActive(true); 
+	}
+	public void DeactivateAbilityIndicator() // DeactivateAbilityIndicator in Tower class
+	{
+		abilityIndicator.SetActive(false);
+		abilityReady = false;
 	}
 
 }

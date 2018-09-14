@@ -19,13 +19,12 @@ public class ShockTower : Tower {
 			}
 			if (Input.GetMouseButtonDown(1))
 			{
-				DeactivateChainLightningIndicator();
+				DeactivateAbilityIndicator();
 			}
 		}	
 	}
 	[SerializeField] GameObject lightningPrefab;
 	[SerializeField] int lightningStrikes;
-	float shotCD;
 	float chainLightningCD;
 	public override void Fire()
 	{
@@ -60,7 +59,7 @@ public class ShockTower : Tower {
 	void ChainLightning()
 	{
 		// i think i will send out  a projectile here
-		chainLightningCD = Time.time + abilityCooldown;
+		abilityCountdown = Time.time + abilityCooldown;
 		LightningBall chainLightningShot = projectile.GetComponent<LightningBall>();
 		chainLightningShot.damage = chainLightningDamage;
 		chainLightningShot.numberOfBounces = howManyTimesDoesTheLightningJump;
@@ -68,20 +67,9 @@ public class ShockTower : Tower {
 		GameObject throwthis = Instantiate(projectile, chainLightningIndicator.transform.position, chainLightningIndicator.transform.rotation);
 		
 		throwthis.GetComponent<Rigidbody>().AddRelativeForce(0,0,forceOfThrow);
-		DeactivateChainLightningIndicator();
+		DeactivateAbilityIndicator();
 	}
-	public void DeactivateChainLightningIndicator()
-	{
-		abilityReady = false;
-		chainLightningIndicator.SetActive(false);
-	}
-	public void ActivateChainLightningIndicator()
-	{
-		if (Time.time < chainLightningCD)
-			return;
-		chainLightningIndicator.SetActive(true);
-		abilityReady = true;	
-	}
+	
 	IEnumerator LightingFiringSequence(GameObject targetOfAttack, int howManyTimesToAttack)
 	{
 		

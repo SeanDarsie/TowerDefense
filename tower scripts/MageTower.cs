@@ -8,7 +8,6 @@ public class MageTower : Tower {
 
 	
 	// Update is called once per frame
-	private float shotCD;
 	private float forcePushCD;
 	void Update () {
 		if (Time.time >= shotCD)
@@ -23,7 +22,7 @@ public class MageTower : Tower {
 			}
 			if (Input.GetMouseButtonDown(1))
 			{
-				DeactivateForcePushIndicator();
+				DeactivateAbilityIndicator();
 			}
 		}
 	}
@@ -55,7 +54,7 @@ public class MageTower : Tower {
 	[SerializeField] GameObject forcePushIndicator;
 	void ForcePush()
 	{
-		forcePushCD = Time.time + abilityCooldown;
+		abilityCountdown = Time.time + abilityCooldown;
 		foreach (GameObject x in pushEnabler.creepsInsideCollider)
 		{
 			Vector3 someDirection = x.transform.position - transform.position;
@@ -64,20 +63,6 @@ public class MageTower : Tower {
 			// x.GetComponent<Creep>().enabled = false;
 			x.GetComponent<IPushable>().BePushed(-someDirection);
 		}
-		DeactivateForcePushIndicator();
-	}
-	public void ActivateForcePushIndicator()
-	{
-		if (Time.time < forcePushCD)
-			return;
-		abilityReady = true;
-		forcePushIndicator.SetActive(true);
-		// line = GetComponent<LineRenderer>();
-	}
-	public void DeactivateForcePushIndicator() 
-	{
-		forcePushIndicator.SetActive(false);
-		abilityReady = false;
-		// line.SetPosition(1, transform.position);
+		DeactivateAbilityIndicator();
 	}
 }

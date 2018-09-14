@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class FrostTower : Tower {
-	[SerializeField] GameObject flashFreezeIndicator;
-	float shotCD;
 	// bool flashFreezeReady;
 	void Update () {
 		if (Time.time >= shotCD)
@@ -19,7 +17,7 @@ public class FrostTower : Tower {
 			}
 			if (Input.GetMouseButtonDown(1))
 			{
-				DeactivateFlashFreezeIndicator();
+				DeactivateAbilityIndicator();
 			}
 		}
 	}
@@ -50,20 +48,8 @@ public class FrostTower : Tower {
 				net.BeNetted(howLongToFreezeEnemies);
 			}
 		}
-		flashFreezeCD = Time.time + abilityCooldown;
-		DeactivateFlashFreezeIndicator();
+		abilityCountdown = Time.time + abilityCooldown;
+		DeactivateAbilityIndicator();
 		// freeze some enemies. doesn't hit air units Air units will have their own path.
-	}
-	public void ActivateFlashFreezeIndicator()
-	{
-		if (Time.time < flashFreezeCD)
-			return;
-		abilityReady = true;
-		flashFreezeIndicator.SetActive(true);
-	}
-	public void DeactivateFlashFreezeIndicator() 
-	{
-		flashFreezeIndicator.SetActive(false);
-		abilityReady = false;	
 	}
 }
