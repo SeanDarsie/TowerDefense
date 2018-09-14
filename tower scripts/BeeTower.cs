@@ -36,6 +36,7 @@ public class BeeTower : Tower {
 		// summon a bee if there are not full bees
 		if (numberOfBees < maxBees)
 		{
+			shotCD = Time.time + reloadSpeed;
 			numberOfBees++;
 			GameObject bee = Instantiate(projectile, firePos.position,firePos.rotation);
 			bee.GetComponent<BeeScript>().damage = damage;
@@ -44,12 +45,14 @@ public class BeeTower : Tower {
 			myBees.Add(bee.GetComponent<BeeScript>()); // TODO: add a way to remove bees as well. probably make them die when their target leaves
 		}
 	}
-	void Frenzy()
+	public void Frenzy()
 	{
 		foreach(BeeScript x in myBees)
 		{
 			x.Frenzy();
 		}
+		DeactivateAbilityIndicator();
+		abilityCountdown = Time.time + abilityCooldown;
 		// Temporarily increase the attack of all the beez
 	}
 }
