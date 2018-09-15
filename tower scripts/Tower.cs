@@ -2,6 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
+
+// TODO: Add audioclips to play when a tower is placed and when a tower fires. 
+//       Add audioclips for upgrading the tower and selling the tower
+// 		 Add audioclips for tower abilities and tower selection(maybe unique per tower, likely not)
+//		 Add the functionality that makes those sounds play at the right time. For placing it will be the tower block script
+//	 	 For firing and ability sounds it will be the abstract class Tower.
+
+
+
 abstract public class Tower : MonoBehaviour {
 	protected PlayerStats player;
 	/// <summary>
@@ -10,7 +20,7 @@ abstract public class Tower : MonoBehaviour {
 	/// </summary>
 	public enum DamageType {PHYSICAL,LIGHTNING,FROST,FIRE,POISON, MAGIC};
 	public DamageType damageType; 
-	abstract public void Fire();
+	abstract public void Fire(); // All subclasses must implement a function with this name
 
 	[Header("From Tower class")]
 	[SerializeField] protected string towerName;

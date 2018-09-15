@@ -59,6 +59,9 @@ public class QuitAndRestart : MonoBehaviour {
 		// FindObjectOfType<StartMenuManager>().StartGame();
 		FindObjectOfType<PlayerStats>().ResetLevelHealthAndMonies();
 		FindObjectOfType<TowerManager>().DestroyAllTowers();
+		BeeScript[] allBees = FindObjectsOfType<BeeScript>();
+		foreach(BeeScript x in allBees)
+			x.gameObject.SetActive(false);
 		// Time.timeScale = 0f; // Temporary. needs to be replaced. actually dont nee
 
 		// musicManager.GameUnPausedMusicVolUp(); // put the music volume back up

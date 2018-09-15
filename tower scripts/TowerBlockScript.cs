@@ -69,7 +69,7 @@ public class TowerBlockScript : MonoBehaviour {
 	{
 		towerModel.SetActive(false);
 	}
-	public void placeTower()
+	public void placeTower() // TODO: add an audioclip to towers that gets played by this script when the tower is placed
 	{
 		if (towerPlacer.towerSelected == false)
 			return;

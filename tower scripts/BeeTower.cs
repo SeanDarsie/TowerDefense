@@ -23,6 +23,7 @@ public class BeeTower : Tower {
 			if (Input.GetMouseButtonDown(0))
 			{
 				Frenzy(); // ????????????? what ability does a bee tower want to do? Enrage?? spew honey? Slow them?
+				// DeactivateAbilityIndicator();
 			}
 			if (Input.GetMouseButtonDown(1))
 			{

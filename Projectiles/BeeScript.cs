@@ -17,13 +17,18 @@ public class BeeScript : MonoBehaviour {
 	float distanceToTarget;
 	[HideInInspector]
 	public CountEnemiesInCollider enemiesInCollider; // set in beetower
-	// Use this for initialization
+	bool frenzy = false; // not currently used for anything. only set in the frenzy function and 
+	bool hasAttacked = false;
 	void Start () { 
 		
 	}
 	
 	// Update is called once per frame   
 	void Update () {
+		if (!myHive.gameObject.activeInHierarchy)
+			gameObject.SetActive(false);
+		if (damage < myHive.gameObject.GetComponent<Tower>().GetDamage())
+			damage = myHive.gameObject.GetComponent<Tower>().GetDamage();
 		if (target != null)
 			if (!target.gameObject.activeInHierarchy)
 				DeselectEnemy();
@@ -80,11 +85,15 @@ public class BeeScript : MonoBehaviour {
 			}
 		}
 		if (Time.time >= frenzyTime)
-			damage = myHive.gameObject.GetComponent<Tower>().GetDamage();
+			{
+				frenzy = false;
+				damage = myHive.gameObject.GetComponent<Tower>().GetDamage();
+			}
 	}
 
 	void Attack()
 	{
+		hasAttacked = true;
 		attackCooldown = Time.time + 0.5f;
 		target.gameObject.GetComponent<Creep>().TakeDamage(damage, Tower.DamageType.POISON);
 	}
@@ -94,15 +103,25 @@ public class BeeScript : MonoBehaviour {
 			return;
 		int randomInt = (int)Random.Range(0,enemiesInCollider.creepsInsideCollider.Count);
 		target = enemiesInCollider.creepsInsideCollider[randomInt].transform;
+		if (!target.gameObject.activeInHierarchy)
+		{
+			target = null;
+			return;
+		}
+		hasAttacked = false;
 	}
 	void DeselectEnemy()
 	{
 		target = null;
+		if (hasAttacked == false)
+			return;
+		// hasAttacked = false;
 		targetingCooldown = Time.time + 3.0f;
 	}
 	float frenzyTime;
 	public void Frenzy()
 	{
+		frenzy = true;
 		frenzyTime = Time.time + 10f;
 		damage *= 2;
 	}
