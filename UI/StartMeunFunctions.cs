@@ -58,6 +58,8 @@ public class StartMeunFunctions : MonoBehaviour,IPointerEnterHandler,IPointerExi
          myText.color = highlightedColor; //Or however you do your color
 		 line1.enabled = true;
 		 line2.enabled = true;
+		 line1.color = highlightedColor;
+		 line2.color = highlightedColor;
 		 SwitchDelegateFunction();
 		//  Debug.Log(eventData.pointerEnter);
      }
@@ -89,9 +91,14 @@ public class StartMeunFunctions : MonoBehaviour,IPointerEnterHandler,IPointerExi
 	{
 		Application.Quit();
 	}
+	[SerializeField] int maxLevel = 1; // TODO: make this a serialized field 
 	void ChooseALevel()
 	{
-		// this function will set the level chooser integer called "ChosenLevel" to whatever the current instace of theis Class contains 
+		// 
+		level++;
+		if (level > maxLevel)
+			level = 0;
+		GetComponentInChildren<Text>().text = "Level " + (level + 1).ToString();
 		FindObjectOfType<LevelChooser>().chosenLevel = level;
 	}
 	void SwitchDelegateFunction()
@@ -113,6 +120,7 @@ public class StartMeunFunctions : MonoBehaviour,IPointerEnterHandler,IPointerExi
 				Debug.Log("My delegate function shows credits");
 				break;
 			case StartMeunFunctions.MenuFunction.LEVEL:
+				myMenuFunction = ChooseALevel;
 				Debug.Log("startMenuFunctions button for choosing a level");
 				break;
 			default:

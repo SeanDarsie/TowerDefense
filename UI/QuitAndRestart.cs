@@ -7,7 +7,8 @@ public class QuitAndRestart : MonoBehaviour {
     [SerializeField] private GameObject pauseMenuUI;
 	[SerializeField] GameObject AreYouSureQuitUI;
 	[SerializeField] GameObject AreYouSureRestartUI;
-	[SerializeField] GameObject startMeuUI;
+	[SerializeField] GameObject startMenu;
+	[SerializeField] Button resumeButton;
 	[SerializeField] CreepSpawner[] currentLevelsCreepspawner;
 	MusicManager musicManager;
 	
@@ -35,7 +36,15 @@ public class QuitAndRestart : MonoBehaviour {
 				PauseGame(playerHasLost);
 			else
 				UnPauseGame();
-		}	
+		}
+		if (gamePaused == true)
+			{
+				// if we click off the ui i want to unpause the game
+				if (Input.GetMouseButtonDown(0))
+				{
+					// raycast to see if we hit some of the menu??
+				}
+			}
 	}
 
 	public void QuitGame()
@@ -47,7 +56,7 @@ public class QuitAndRestart : MonoBehaviour {
 	
 
 		// bring up start menu
-		startMeuUI.SetActive(true);
+		startMenu.SetActive(true);
 
 		// close quit ui
 		AreYouSureQuitUI.SetActive(false);
@@ -79,12 +88,19 @@ public class QuitAndRestart : MonoBehaviour {
 		FindObjectOfType<StartMenuManager>().StartGame();
 		FindObjectOfType<PlayerStats>().ResetLevelHealthAndMonies();
 		FindObjectOfType<TowerManager>().DestroyAllTowers();
+		BeeScript[] allBees = FindObjectsOfType<BeeScript>();
+		foreach(BeeScript x in allBees)
+			x.gameObject.SetActive(false);
+		resumeButton.interactable = true;
 	}
 
 	public void PauseGame(bool hasPlayerLost)
 	{	
 		if (hasPlayerLost == true)
-			musicManager.StartDeathMusic();
+			{
+				musicManager.StartDeathMusic();
+				resumeButton.interactable = false; // make interactible in the start game function i suppoose
+			}
 		// else
 		// 	musicManager.GamePausedMusicVolDown();
 		playerHasLost = hasPlayerLost;

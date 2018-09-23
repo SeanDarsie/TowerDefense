@@ -17,7 +17,7 @@ public class BeeScript : MonoBehaviour {
 	float distanceToTarget;
 	[HideInInspector]
 	public CountEnemiesInCollider enemiesInCollider; // set in beetower
-	bool frenzy = false; // not currently used for anything. only set in the frenzy function and 
+	// bool frenzy = false; // not currently used for anything. only set in the frenzy function and 
 	bool hasAttacked = false;
 	void Start () { 
 		
@@ -86,7 +86,7 @@ public class BeeScript : MonoBehaviour {
 		}
 		if (Time.time >= frenzyTime)
 			{
-				frenzy = false;
+				// frenzy = false;
 				damage = myHive.gameObject.GetComponent<Tower>().GetDamage();
 			}
 	}
@@ -121,7 +121,7 @@ public class BeeScript : MonoBehaviour {
 	float frenzyTime;
 	public void Frenzy()
 	{
-		frenzy = true;
+		// frenzy = true;
 		frenzyTime = Time.time + 10f;
 		damage *= 2;
 	}
