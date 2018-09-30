@@ -2,31 +2,41 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class Creep : MonoBehaviour, IPushable, IHittable, IStunnable, INettable, ISlowable, IShockable {
+public abstract class Creep : MonoBehaviour, IPushable, IHittable, IStunnable, INettable, ISlowable, IShockable,IBurnable,IPoisonable {
 
 	// protected abstract void dieHorribly();
 	// protected abstract void dieVictoriously();
 
-	[SerializeField] public Transform[] corners;
-	
-	[SerializeField] protected  int rewardForKilling;
-	[SerializeField] protected int moneyForKilling;
-	[SerializeField] protected  int health;
-	[SerializeField] protected  int maxHealth;
-	[SerializeField] public int healthIncrement; // public so it can be used by the creepspawner. Serialized so it looks more pretty!
-	[SerializeField] protected  int damage;
-	[SerializeField] protected  float speed;
-	[SerializeField] protected float turnSpeed = 5.0f;
-	[SerializeField] protected  int physicalResistance; 
-	[SerializeField] protected int shockResistance;
-	[SerializeField] protected int fireResistance;
-	[SerializeField] protected int frostResistance;
-	[SerializeField] protected int poisonResistance;
-	[SerializeField] protected int magicResistance;
-	[SerializeField] protected float frostResistanceToSlow; // the interface function beslowed will be affected by this ????? percentage i guess
-	[SerializeField] protected CreepManager creepManager;
-	[SerializeField] protected PlayerStats playerStats;
+	[SerializeField] public 	Transform[]	corners;
+	[SerializeField] protected  int 		rewardForKilling;
+	[SerializeField] protected 	int 		moneyForKilling;
+	[SerializeField] protected  int 		health;
+	[SerializeField] protected  int 		maxHealth;
+	[SerializeField] public 	int 		healthIncrement; // public so it can be used by the creepspawner. Serialized so it looks more pretty!
+	[SerializeField] protected  int 		damage;
+	[SerializeField] protected  float 		speed;
+	[SerializeField] protected 	float 		turnSpeed = 5.0f;
+	[SerializeField] protected  int 		physicalResistance; 
+	[SerializeField] protected 	int 		shockResistance;
+	[SerializeField] protected 	int 		fireResistance;
+	[SerializeField] protected 	int 		frostResistance;
+	[SerializeField] protected 	int 		poisonResistance;
+	[SerializeField] protected 	int 		magicResistance;
+	[SerializeField] protected 	int 		physicalVulnerability;	
+	[SerializeField] protected 	int 		shockVulnerability;
+	[SerializeField] protected 	int 		fireVulnerability;
+	[SerializeField] protected 	int 		frostVulnerability;
+	[SerializeField] protected 	int 		poisonVulnerability;
+	[SerializeField] protected 	int 		magicVulnerability;
+	[SerializeField] protected 	float 		frostResistanceToSlow; // the interface function beslowed will be affected by this ????? percentage i guess
+	[SerializeField] protected 	CreepManager creepManager;
+	[SerializeField] protected 	PlayerStats	 playerStats;
+	[SerializeField] public 	bool		 isPoisoned;
+	[SerializeField] protected	float		 poisonTimeTick = 1.0f;
+	[SerializeField] public		int			 poisonDamage;
 	protected int cornersInd = 0;
+	protected int poisonTicks = 0;
+	protected float poisonTime;
 
 	// Use this for initialization
 	protected void Start () {
@@ -52,8 +62,6 @@ public abstract class Creep : MonoBehaviour, IPushable, IHittable, IStunnable, I
 				if (hit.collider.tag == "Cloud")
 				{
 					GetComponent<Rigidbody>().useGravity = true;
-					// GetComponent<Rigidbody>().AddForce(directionOfPush);
-					//this.enabled = false;
 				}
 				else
 				{
@@ -64,12 +72,20 @@ public abstract class Creep : MonoBehaviour, IPushable, IHittable, IStunnable, I
 			else
 			{
 				GetComponent<Rigidbody>().useGravity = true;
-				// GetComponent<Rigidbody>().AddForce(directionOfPush);
-				// this.enabled = false;
+
 			}
 		}
 		if (transform.position.y <= -10f)
 				dieHorribly();
+		if (isPoisoned == true && Time.time >= poisonTime)
+		{
+			TakeDamage(poisonDamage, Tower.DamageType.POISON);
+			poisonTicks--;
+			if (poisonTicks <= 0)
+				isPoisoned = false;
+			else
+				poisonTime = Time.time + poisonTimeTick;
+		}
 	}
 	
 	protected void moveToNextSpot()
@@ -122,7 +138,7 @@ public abstract class Creep : MonoBehaviour, IPushable, IHittable, IStunnable, I
 	{
 		// GetComponent<Rigidbody>().useGravity = true;
 		// GetComponent<Rigidbody>().isKinematic = false;
-		// GetComponent<Rigidbody>().AddRelativeForce(Random.Range(-500, 500),Random.Range(-500, 500),Random.Range(-500, 500));
+		// GetComponent<Rigidbody>().AddRelativeForce(Random.Range(-2000, 2000),Random.Range(0, 1000),Random.Range(-2000, 2000));
 		
 		creepManager.removeCreep(gameObject);
 		creepManager.ReMakeList();
@@ -142,8 +158,7 @@ public abstract class Creep : MonoBehaviour, IPushable, IHittable, IStunnable, I
 		gotPushed = true;
 		GetComponent<Rigidbody>().isKinematic = false;
 		GetComponent<Rigidbody>().useGravity = true;
-		GetComponent<Rigidbody>().AddRelativeForce(directionOfPush * forceToBePushedBy);
-
+		GetComponent<Rigidbody>().AddForce(directionOfPush * forceToBePushedBy);
 	}
 	public void TakeDamage(int damage, Tower.DamageType damageType)
 	{
@@ -153,21 +168,27 @@ public abstract class Creep : MonoBehaviour, IPushable, IHittable, IStunnable, I
 		{
 			case Tower.DamageType.PHYSICAL:
 				damage -= physicalResistance;
+				damage += physicalVulnerability;
 				break;
 			case Tower.DamageType.LIGHTNING:
 				damage -= shockResistance;
+				damage += shockVulnerability;
 				break;
 			case Tower.DamageType.FROST:
 				damage -= frostResistance;
+				damage += frostVulnerability;
 				break;
 			case Tower.DamageType.FIRE:
 				damage -= fireResistance;
+				damage += fireVulnerability;
 				break;
 			case Tower.DamageType.POISON:
 				damage -= poisonResistance;
+				damage += poisonVulnerability;
 				break;
 			case Tower.DamageType.MAGIC:
 				damage -= magicResistance;
+				damage += magicVulnerability;
 				break;
 			default:
 				damage -= physicalResistance;
@@ -182,6 +203,9 @@ public abstract class Creep : MonoBehaviour, IPushable, IHittable, IStunnable, I
 	{
 		// TODO: show some effect that the goblin has died.
 		// play a death sound as well
+		// GetComponent<Rigidbody>().useGravity = true;
+		// GetComponent<Rigidbody>().isKinematic = false;
+		// GetComponent<Rigidbody>().AddRelativeForce(Random.Range(-2000, 2000),Random.Range(0, 1000),Random.Range(-2000, 2000));
 		playerStats.UpdateScore(rewardForKilling);
 		playerStats.AdjustMonies(moneyForKilling);
 		creepManager.removeCreep(gameObject);
@@ -226,14 +250,25 @@ public abstract class Creep : MonoBehaviour, IPushable, IHittable, IStunnable, I
 	public void BeShocked(int shockDamage, int numberOfBounces)
 	{
 		TakeDamage(shockDamage, Tower.DamageType.LIGHTNING);
-		//DigitalRuby.LightningBolt.LightningBoltScript freeLightning = GameObject.FindWithTag("LightningBolt").GetComponent<DigitalRuby.LightningBolt.LightningBoltScript>();
-		//freeLightning.StartObject = gameObject;
-		BeNetted(0.5f); // maybe just do an aoe attack/stun
-		// if (numberOfBounces > 0)
-		// {
-		// 	StartCoroutine(ShockTheNextGuy(shockDamage, numberOfBounces - 1));
-		// }
-		// find the nex
+		BeNetted(0.5f);
+	}
+	public void BeBurned(int burnDamage, int burnTicks)
+	{
+		Debug.Log("Got burned");
+	}
+	public void BePoisoned(int poisonDamage, int poisonTicks)
+	{
+		if (isPoisoned == false)
+		{
+			this.poisonDamage = poisonDamage;
+			this.poisonTicks += poisonTicks;
+			isPoisoned = true;
+		}
+		else
+		{
+			this.poisonDamage = this.poisonDamage > poisonDamage ? this.poisonDamage : poisonDamage;
+			this.poisonTicks += poisonTicks;
+		}
 	}
 	IEnumerator ShockTheNextGuy(int shockDamage, int numberOfBounces)
 	{
@@ -269,35 +304,4 @@ public abstract class Creep : MonoBehaviour, IPushable, IHittable, IStunnable, I
 	{
 		
 	}
-
-
-
-
-
-//TODO:	// IEnumerator PushedAway(float lengthOfPushback, Vector3 directionOfPush)
-	// {
-	// 	float speedOfPush = 1.0f;
-	// 	while (Time.time <= lengthOfPushback)
-	// 	{
-	// 		//move back from the pusher
-	// 		transform.Translate(directionOfPush * Time.deltaTime * speedOfPush);
-	// 		speedOfPush += 0.2f;
-	// 		yield return new WaitForSeconds(Time.deltaTime);
-	// 	}
-	// 	// check if a cloud is directly beneath me
-	// 	RaycastHit hit;
-		
-	// 	// }	// if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, 100000))
-	// 	Ray downRay = new Ray(transform.position, -transform.up);
-	// 	if (Physics.Raycast(downRay, out hit, 100))
-	// 	{
-	// 		if (hit.collider.tag == "Cloud")
-	// 			{
-	// 				GetComponent<Rigidbody>().useGravity = true;
-	// 				// GetComponent<Rigidbody>().AddForce(directionOfPush);
-	// 				this.enabled = false;
-	// 			}
-	// 	}
-	// 	yield return null;
-	// }
 }

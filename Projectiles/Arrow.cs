@@ -33,10 +33,10 @@ public class Arrow : MonoBehaviour {
 	{
 		IHittable badGuy = other.GetComponent<IHittable>();
 		if (badGuy != null && other.gameObject.name == target.gameObject.name)
-			{
-				badGuy.TakeDamage(damage, damageType);
-				Destroy(gameObject);
-			}
+		{
+			badGuy.TakeDamage(damage, damageType);
+			Destroy(gameObject);
+		}
 		// other.GetComponent<IHittable>().TakeDamage(damage);	
 	}
 }

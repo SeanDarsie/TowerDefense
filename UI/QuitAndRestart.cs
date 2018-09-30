@@ -49,12 +49,6 @@ public class QuitAndRestart : MonoBehaviour {
 
 	public void QuitGame()
 	{
-		// Application.Quit(); Now handled elseWhere
-		// activate main menu. Reset Level(x);
-
-		// Debug.Log("Whay are you restarting the game");
-	
-
 		// bring up start menu
 		startMenu.SetActive(true);
 
@@ -71,6 +65,9 @@ public class QuitAndRestart : MonoBehaviour {
 		BeeScript[] allBees = FindObjectsOfType<BeeScript>();
 		foreach(BeeScript x in allBees)
 			x.gameObject.SetActive(false);
+		FindObjectOfType<TowerPlacingScript>().towerModel = null;
+		FindObjectOfType<TowerPlacingScript>().towerPrefab = null;
+		FindObjectOfType<TowerPlacingScript>().towerSelected = false;
 		// Time.timeScale = 0f; // Temporary. needs to be replaced. actually dont nee
 
 		// musicManager.GameUnPausedMusicVolUp(); // put the music volume back up
@@ -88,6 +85,9 @@ public class QuitAndRestart : MonoBehaviour {
 		FindObjectOfType<StartMenuManager>().StartGame();
 		FindObjectOfType<PlayerStats>().ResetLevelHealthAndMonies();
 		FindObjectOfType<TowerManager>().DestroyAllTowers();
+		FindObjectOfType<TowerPlacingScript>().towerModel = null;
+		FindObjectOfType<TowerPlacingScript>().towerPrefab = null;
+		FindObjectOfType<TowerPlacingScript>().towerSelected = false;
 		BeeScript[] allBees = FindObjectsOfType<BeeScript>();
 		foreach(BeeScript x in allBees)
 			x.gameObject.SetActive(false);

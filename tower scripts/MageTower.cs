@@ -61,7 +61,7 @@ public class MageTower : Tower {
 			// Debug.Log("someDirection: " + someDirection);
 			// x.GetComponent<IPushable>().BePushed(someDirection);
 			// x.GetComponent<Creep>().enabled = false;
-			x.GetComponent<IPushable>().BePushed(-someDirection);
+			x.GetComponent<IPushable>().BePushed(someDirection);
 		}
 		DeactivateAbilityIndicator();
 	}
