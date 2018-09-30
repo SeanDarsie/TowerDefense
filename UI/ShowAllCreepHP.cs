@@ -23,18 +23,40 @@ public class ShowAllCreepHP : MonoBehaviour {
 	}
 	public void turnOffHealth()
 	{
+		CreepSpawner[] creepSpawner = FindObjectsOfType<CreepSpawner>();
+		foreach (CreepSpawner x in creepSpawner)
+		{
+			if (x.isActiveAndEnabled)
+			{
+				foreach(GameObject creep in x.creeps)
+				{
+					creep.GetComponent<ShowTargetHealth>().turnOffHPBar();
+				}
+			}
+		}
 		foreach(GameObject x in creepManager.getActiveCreeps())
 		{
-			x.GetComponent<ShowTargetHealth>().turnOnHPBar();
+			x.GetComponent<ShowTargetHealth>().turnOffHPBar();
 		}
 		hpIsOn = false;
 		buttonText.text = nameWhenCreepHealthIsOn;
 	}
 	public void turnOnHealth()
 	{
-			foreach(GameObject x in creepManager.getActiveCreeps())
+		CreepSpawner[] creepSpawner = FindObjectsOfType<CreepSpawner>();
+		foreach (CreepSpawner x in creepSpawner)
 		{
-			x.GetComponent<ShowTargetHealth>().turnOffHPBar();
+			if (x.isActiveAndEnabled)
+			{
+				foreach(GameObject creep in x.creeps)
+				{
+					creep.GetComponent<ShowTargetHealth>().turnOnHPBar();
+				}
+			}
+		}
+		foreach(GameObject x in creepManager.getActiveCreeps())
+		{
+			x.GetComponent<ShowTargetHealth>().turnOnHPBar();
 		}
 		hpIsOn = true;
 		buttonText.text = nameWhenCreepHealthIsOff;

@@ -6,7 +6,7 @@ using UnityEngine;
 public class CreepSpawner : MonoBehaviour {
 	// who is supposed to tell the creep spawner to start spawning. Game Manager???
 	[SerializeField] CreepManager CM;
-	[SerializeField] GameObject[] creeps; 
+	[SerializeField] public GameObject[] creeps; 
 	[SerializeField] Transform whereToSpawn;
 	[SerializeField] int numberOfUniqueCreepTypes;
 	[SerializeField] int wave = 0;
