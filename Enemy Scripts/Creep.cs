@@ -194,6 +194,8 @@ public abstract class Creep : MonoBehaviour, IPushable, IHittable, IStunnable, I
 				damage -= physicalResistance;
 				break;
 		}
+		if (damage < 5)
+			damage = 5;
 		health -= damage;
 		if (health <= 0)
 			dieHorribly();

@@ -16,6 +16,7 @@ public class QuitAndRestart : MonoBehaviour {
 	public bool playerHasLost = false;
 	
     private bool gamePaused = false;
+	public bool mouseOverMenu = false;
 
     // Use this for initialization
     void Start () {
@@ -39,10 +40,10 @@ public class QuitAndRestart : MonoBehaviour {
 		}
 		if (gamePaused == true)
 			{
-				// if we click off the ui i want to unpause the game
-				if (Input.GetMouseButtonDown(0))
+				if (mouseOverMenu == false)
 				{
-					// raycast to see if we hit some of the menu??
+					if (Input.GetMouseButtonDown(0))
+						UnPauseGame();
 				}
 			}
 	}
@@ -137,6 +138,7 @@ public class QuitAndRestart : MonoBehaviour {
 	{
 		AreYouSureQuitUI.SetActive(false);
 		AreYouSureRestartUI.SetActive(false);
-		UnPauseGame();
+		// UnPauseGame();
+		pauseMenuUI.SetActive(true);
 	}
 }
