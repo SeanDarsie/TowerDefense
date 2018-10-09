@@ -44,7 +44,7 @@ public class PlayerStats : MonoBehaviour {
 	public void AdjustMonies(int someAmount)
 	{
 		monies += someAmount;
-		moniesTxt.text  = "GOLD DELICIOUS GOLD: " + monies;
+		moniesTxt.text  = "GOLD: " + monies;
 	}
 	void Lose()
 	{

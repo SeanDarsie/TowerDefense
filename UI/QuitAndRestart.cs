@@ -16,7 +16,7 @@ public class QuitAndRestart : MonoBehaviour {
 	public bool playerHasLost = false;
 	
     private bool gamePaused = false;
-	public bool mouseOverMenu = false;
+	public bool mouseOverMenu = true;
 
     // Use this for initialization
     void Start () {
@@ -47,8 +47,9 @@ public class QuitAndRestart : MonoBehaviour {
 				}
 			}
 	}
-
-	public void QuitGame()
+	// The quit game function returns the player to the main menu and cleanses the scene of all leftover items that need to be cleaned up.
+	// Will likely need to keep editing this in the future
+	public void QuitGame() // TODO: clean up this code and comment it maybe
 	{
 		// bring up start menu
 		startMenu.SetActive(true);
@@ -65,6 +66,9 @@ public class QuitAndRestart : MonoBehaviour {
 		FindObjectOfType<TowerManager>().DestroyAllTowers();
 		BeeScript[] allBees = FindObjectsOfType<BeeScript>();
 		foreach(BeeScript x in allBees)
+			x.gameObject.SetActive(false);
+		Arrow[] allArrows = FindObjectsOfType<Arrow>();
+		foreach(Arrow x in allArrows)
 			x.gameObject.SetActive(false);
 		FindObjectOfType<TowerPlacingScript>().towerModel = null;
 		FindObjectOfType<TowerPlacingScript>().towerPrefab = null;

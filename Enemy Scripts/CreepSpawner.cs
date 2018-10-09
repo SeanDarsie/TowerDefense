@@ -8,7 +8,7 @@ public class CreepSpawner : MonoBehaviour {
 	[SerializeField] CreepManager CM;
 	[SerializeField] public GameObject[] creeps; 
 	[SerializeField] Transform whereToSpawn;
-	[SerializeField] int numberOfUniqueCreepTypes;
+	int numberOfUniqueCreepTypes;
 	[SerializeField] int wave = 0;
 	[SerializeField] float timeTillNextWave;
 	[SerializeField] int numberOfCreepsToSpawn;
@@ -23,6 +23,7 @@ public class CreepSpawner : MonoBehaviour {
 	void Start () { // commment
 		CM = GameObject.FindWithTag("CreepManager").GetComponent<CreepManager>();
 		whereToSpawn = transform;
+		numberOfUniqueCreepTypes = creeps.Length;
 		// sendCreepWave();
 	}
 	

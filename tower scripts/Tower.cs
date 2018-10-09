@@ -56,7 +56,7 @@ abstract public class Tower : MonoBehaviour {
 	public int GetUpgradePrice() {return upgradePrice;}
 	public int GetSellPrice() {return sellPrice;}
 	public string GetName() {return towerName;}
-	public float GetDPS(){return ((float)(damage) * reloadSpeed);}
+	public float GetDPS(){return ((float)(damage) / reloadSpeed);}
 	// =------------------------- Getters ------------------------= //
 
 	public void SellTower() {
@@ -74,15 +74,11 @@ abstract public class Tower : MonoBehaviour {
 		damage += damageUpgrade;
 		reloadSpeed *= reloadSpeedUpgrade;
 		range *= rangeUpgrade;
-		// increase damage. 
-		// increase rof.
-		// increase range.
-		// increase level
 		level++;
 		sellPrice += 1 > upgradePrice/2 ? 1 : upgradePrice/2; 
 		upgradePrice *= 2;
 		// sellPrice += 1 > upgradePrice/2 ? 1 : upgradePrice/2; 
-		damageUpgrade += 1 > damageUpgrade/2 ? 1 : damageUpgrade/2; 
+		// damageUpgrade += 1 > damageUpgrade/2 ? 1 : damageUpgrade/2; 
 	}
 	protected float abilityCountdown;
 	public void ActivateAbilityIndicator() // activateAbilityIndicator in Tower class

@@ -38,10 +38,10 @@ public class StartMeunFunctions : MonoBehaviour,IPointerEnterHandler,IPointerExi
 				// Debug.Log("My delegate function Quits the game");
 				break;
 			case StartMeunFunctions.MenuFunction.CREDITS:
-				Debug.Log("My delegate function shows credits");
+//				Debug.Log("My delegate function shows credits");
 				break;
 			case StartMeunFunctions.MenuFunction.LEVEL:
-				Debug.Log("startMenuFunctions button for choosing a level");
+//				Debug.Log("startMenuFunctions button for choosing a level");
 				break;
 			default:
 				break;
@@ -117,11 +117,11 @@ public class StartMeunFunctions : MonoBehaviour,IPointerEnterHandler,IPointerExi
 				// Debug.Log("My delegate function Quits the game");
 				break;
 			case StartMeunFunctions.MenuFunction.CREDITS:
-				Debug.Log("My delegate function shows credits");
+//				Debug.Log("My delegate function shows credits");
 				break;
 			case StartMeunFunctions.MenuFunction.LEVEL:
 				myMenuFunction = ChooseALevel;
-				Debug.Log("startMenuFunctions button for choosing a level");
+//				Debug.Log("startMenuFunctions button for choosing a level");
 				break;
 			default:
 				break;

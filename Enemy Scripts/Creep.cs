@@ -6,7 +6,8 @@ public abstract class Creep : MonoBehaviour, IPushable, IHittable, IStunnable, I
 
 	// protected abstract void dieHorribly();
 	// protected abstract void dieVictoriously();
-
+	public delegate void CreepDies();
+	public event CreepDies ThisCreepHasDied;
 	[SerializeField] public 	Transform[]	corners;
 	[SerializeField] protected  int 		rewardForKilling;
 	[SerializeField] protected 	int 		moneyForKilling;
@@ -38,7 +39,14 @@ public abstract class Creep : MonoBehaviour, IPushable, IHittable, IStunnable, I
 	protected int poisonTicks = 0;
 	protected float poisonTime;
 
-	// Use this for initialization
+	void OnEnable()
+	{
+		ThisCreepHasDied += dieHorribly;
+	}
+	void OnDisable()
+	{
+		ThisCreepHasDied -= dieHorribly;
+	}
 	protected void Start () {
 		creepManager = FindObjectOfType<CreepManager>();
 		playerStats = FindObjectOfType<PlayerStats>();
@@ -198,7 +206,10 @@ public abstract class Creep : MonoBehaviour, IPushable, IHittable, IStunnable, I
 			damage = 5;
 		health -= damage;
 		if (health <= 0)
-			dieHorribly();
+		{
+			if (ThisCreepHasDied != null)
+				ThisCreepHasDied();
+		}
 	}
 
 	protected void dieHorribly()
@@ -208,6 +219,7 @@ public abstract class Creep : MonoBehaviour, IPushable, IHittable, IStunnable, I
 		// GetComponent<Rigidbody>().useGravity = true;
 		// GetComponent<Rigidbody>().isKinematic = false;
 		// GetComponent<Rigidbody>().AddRelativeForce(Random.Range(-2000, 2000),Random.Range(0, 1000),Random.Range(-2000, 2000));
+		// Debug.Log(gameObject.name + " has just died horribly");
 		playerStats.UpdateScore(rewardForKilling);
 		playerStats.AdjustMonies(moneyForKilling);
 		creepManager.removeCreep(gameObject);

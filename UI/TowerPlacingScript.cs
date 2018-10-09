@@ -37,6 +37,12 @@ public class TowerPlacingScript : MonoBehaviour {
 			towerModel.SetActive(false);
 			towerSelected = false;
 		}
+		if (towerToUpgrade != null)
+		{
+			if (FindObjectOfType<PlayerStats>().monies >= towerToUpgrade.GetComponent<Tower>().GetUpgradePrice())
+				upgradeTowerButton.interactable = true;
+		}
+
 		// if (Input.GetMouseButtonDown(0))
 		// 	{	RaycastHit hit;
 		// 		if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, 1000))

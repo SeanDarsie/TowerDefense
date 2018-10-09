@@ -22,6 +22,7 @@ public class StartMenuManager : MonoBehaviour {
 		Time.timeScale = 0f;
 		playerStats = FindObjectOfType<PlayerStats>();
 		musicManager = FindObjectOfType<MusicManager>();
+		startMenuUI.SetActive(true);
 	}
 	
 	// Update is called once per frame
