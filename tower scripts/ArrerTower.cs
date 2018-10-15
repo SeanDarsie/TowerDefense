@@ -44,51 +44,10 @@ public class ArrerTower : Tower {
 		arrow.target = target;
 		arrow.damageType = damageType;
 		shotCD = Time.time + reloadSpeed;
+		audioSource.PlayOneShot(firingSound);
         // throw new System.NotImplementedException();
     }	
-	// scatter arrow section
-	// [Header("Scatter Ability")]
-	// [HideInInspector]
-	// bool scatterSelected; // for ui and indicator purposes. 
-	// public int scatterDamage;
-	// public float scatterRadius;
-	// public float scatterCD;
-	// private float creepDist;
-	// public void upgradeScatterArrowAbility()
-	// {
-	// 	scatterDamage++; // increase scatter damage.
-	// 	scatterRadius++; // increase radius ??
-	// 	scatterCD--; // reduce CD
-	// }
-	// void /// <summary>
-	// /// Callback to draw gizmos that are pickable and always drawn.
-	// /// </summary>
-	// public Color color;
-	// void OnDrawGizmos()
-	// {
-	// 	Gizmos.color = color;
-	// 	Gizmos.DrawSphere(transform.position, range);
-	// }
-	// public void scatterArrow() // list or array. doesn't matter to me atm.
-    // {
-	// 	List<GameObject> creeps = creepManager.getActiveCreeps();
-    //     // deal damage to all creeps within tower range.
-	// 	// Debug.Log("Creeps   " + creeps[0].name);
-	// 	int something = 0;
-    //     foreach (GameObject x in creeps)
-    //     {
-	// 		// Debug.Log("foreach loop ScatterArrow " + something);
-	// 		creepDist = Vector3.Distance(transform.position, x.gameObject.transform.position);
-	// 		if (creepDist <= scatterRadius && x.activeInHierarchy)
-	// 		{
-	// 			IHittable badGuy = x.GetComponent<IHittable>();
-	// 			if (badGuy != null)
-	// 				badGuy.TakeDamage(scatterDamage);
-	// 		}
-	// 		something++;
-    //     }
-	// 	something = 0;
-    // }
+	
     // throw net section
     [Header("Net Ability Settings")]
     [HideInInspector]

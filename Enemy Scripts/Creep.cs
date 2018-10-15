@@ -8,6 +8,8 @@ public abstract class Creep : MonoBehaviour, IPushable, IHittable, IStunnable, I
 	// protected abstract void dieVictoriously();
 	public delegate void CreepDies();
 	public event CreepDies ThisCreepHasDied;
+	[SerializeField] protected AudioClip deathClip;
+	protected AudioSource audioSource;
 	[SerializeField] public 	Transform[]	corners;
 	[SerializeField] protected  int 		rewardForKilling;
 	[SerializeField] protected 	int 		moneyForKilling;
@@ -48,6 +50,7 @@ public abstract class Creep : MonoBehaviour, IPushable, IHittable, IStunnable, I
 		ThisCreepHasDied -= dieHorribly;
 	}
 	protected void Start () {
+		audioSource = GetComponent<AudioSource>();
 		creepManager = FindObjectOfType<CreepManager>();
 		playerStats = FindObjectOfType<PlayerStats>();
 		// corners = FindObjectOfType<LevelManager>().getCoreners();
@@ -147,7 +150,7 @@ public abstract class Creep : MonoBehaviour, IPushable, IHittable, IStunnable, I
 		// GetComponent<Rigidbody>().useGravity = true;
 		// GetComponent<Rigidbody>().isKinematic = false;
 		// GetComponent<Rigidbody>().AddRelativeForce(Random.Range(-2000, 2000),Random.Range(0, 1000),Random.Range(-2000, 2000));
-		
+		//audioSource.PlayOneShot(deathClip);
 		creepManager.removeCreep(gameObject);
 		creepManager.ReMakeList();
 		playerStats.AdjustHealth(-damage);

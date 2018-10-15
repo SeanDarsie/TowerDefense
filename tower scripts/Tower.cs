@@ -20,6 +20,12 @@ abstract public class Tower : MonoBehaviour {
 	/// </summary>
 	public enum DamageType {PHYSICAL,LIGHTNING,FROST,FIRE,POISON, MAGIC};
 	public DamageType damageType; 
+	protected AudioSource audioSource;
+	[SerializeField] protected AudioClip firingSound;
+	// [SerializeField] protected AudioClip buildingSound;
+	// [SerializeField] protected AudioClip sellingSound;
+	// [SerializeField] protected AudioClip upgradingSound;
+	// [SerializeField] protected AudioClip abilitySound;
 	abstract public void Fire(); // All subclasses must implement a function with this name
 
 	[Header("From Tower class")]
@@ -46,6 +52,7 @@ abstract public class Tower : MonoBehaviour {
 	protected void Start () {
 		creepManager = FindObjectOfType<CreepManager>();
 		player = FindObjectOfType<PlayerStats>();	
+		audioSource = GetComponent<AudioSource>();
 	}
 	
 	// =------------------------- Getters ------------------------= //
