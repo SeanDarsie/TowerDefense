@@ -34,6 +34,7 @@ public class StartMenuManager : MonoBehaviour {
 	 {
 		towerUI.SetActive(false);
 		FindObjectOfType<TowerPlacingScript>().towerUIAbleToBeSummoned = true;
+		FindObjectOfType<TowerManager>().InitializeTowerUI();
 		musicManager.ReduceMusicVolWhenPaused(true);
 		int whatLevelIsIt = FindObjectOfType<LevelChooser>().chosenLevel;
 		Time.timeScale = 1.0f;

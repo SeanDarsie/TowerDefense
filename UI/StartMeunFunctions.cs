@@ -3,6 +3,9 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 public class StartMeunFunctions : MonoBehaviour,IPointerEnterHandler,IPointerExitHandler,IPointerDownHandler,IPointerUpHandler {
 	Text myText;
@@ -90,7 +93,13 @@ public class StartMeunFunctions : MonoBehaviour,IPointerEnterHandler,IPointerExi
 	 }
 	void quitGame()
 	{
-		Application.Quit();
+		#if UNITY_EDITOR
+      		UnityEditor.EditorApplication.isPlaying = false;
+ 		#else
+ 			Application.Quit();
+ 		#endif
+
+
 	}
 	[SerializeField] int maxLevel = 1; // TODO: make this a serialized field 
 	void ChooseALevel()
