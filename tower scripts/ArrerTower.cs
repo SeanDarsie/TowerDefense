@@ -10,6 +10,7 @@ public class ArrerTower : Tower {
 	void Update () {
 		if (abilityReady)
 		{
+			FindObjectOfType<TowerPlacingScript>().towerUIAbleToBeSummoned = false;
 			if (Input.GetMouseButtonDown(0))
 				throwNet();
 			if (Input.GetMouseButtonDown(1))
@@ -38,6 +39,7 @@ public class ArrerTower : Tower {
 			Vector3.Distance(transform.position, target.position) > range)
 			return;
 		// shoot an arrow and give it a target to fly towards.
+		// Quaternion lookRot = new Quaternion(0,1,0,firePos.rotation.w);
 		GameObject myArrow = Instantiate(projectile, firePos.position, firePos.rotation) as GameObject;
 		Arrow arrow = myArrow.GetComponent<Arrow>(); 
 		arrow.damage = damage;

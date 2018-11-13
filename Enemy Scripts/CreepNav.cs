@@ -1,15 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
-public abstract class Creep : MonoBehaviour, IPushable, IHittable, IStunnable, INettable, ISlowable, IShockable,IBurnable,IPoisonable {
+public class CreepNav : MonoBehaviour, IPushable, IHittable, IStunnable, INettable, ISlowable, IShockable,IBurnable,IPoisonable  {
 
-	// protected abstract void dieHorribly();
-	// protected abstract void dieVictoriously();
 	public delegate void CreepDies();
 	public event CreepDies ThisCreepHasDied;
 	[SerializeField] protected AudioClip deathClip;
 	protected AudioSource audioSource;
+	protected NavMeshAgent agent;
 	[SerializeField] public 	Transform[]	corners;
 	[SerializeField] protected  int 		rewardForKilling;
 	[SerializeField] protected 	int 		moneyForKilling;
@@ -43,6 +43,9 @@ public abstract class Creep : MonoBehaviour, IPushable, IHittable, IStunnable, I
 
 	void OnEnable()
 	{
+		agent = GetComponent<NavMeshAgent>();
+		if (corners.Length > 0)
+			agent.SetDestination(corners[corners.Length - 1].position);
 		ThisCreepHasDied += dieHorribly;
 	}
 	void OnDisable()
@@ -50,6 +53,10 @@ public abstract class Creep : MonoBehaviour, IPushable, IHittable, IStunnable, I
 		ThisCreepHasDied -= dieHorribly;
 	}
 	protected void Start () {
+		agent = GetComponent<NavMeshAgent>();
+		if (corners.Length > 0)
+			agent.SetDestination(corners[corners.Length - 1].position);
+		ThisCreepHasDied += dieHorribly;
 		audioSource = GetComponent<AudioSource>();
 		creepManager = FindObjectOfType<CreepManager>();
 		playerStats = FindObjectOfType<PlayerStats>();
@@ -61,8 +68,8 @@ public abstract class Creep : MonoBehaviour, IPushable, IHittable, IStunnable, I
 	protected float timeSincePush;
 	void Update () {
 		//Debug.Log("Creep Update");
-		LookAtDestination();
-		moveToNextSpot();
+		// LookAtDestination();
+		// moveToNextSpot();
 		
 		if (gotPushed && Time.time >= timeSincePush)
 		{
@@ -78,6 +85,7 @@ public abstract class Creep : MonoBehaviour, IPushable, IHittable, IStunnable, I
 				{
 					GetComponent<Rigidbody>().useGravity = false;
 					GetComponent<Rigidbody>().isKinematic = true;
+					agent.enabled = true;
 				}
 			}
 			else
@@ -99,37 +107,38 @@ public abstract class Creep : MonoBehaviour, IPushable, IHittable, IStunnable, I
 		}
 	}
 	
-	protected void moveToNextSpot()
-	{
-		// move towards next corner if you have reached 
-		if (Vector3.Distance(transform.position, corners[cornersInd].position) < 0.5f)
-		{
-			cornersInd++;
-			if (cornersInd >= corners.Length)
-			{
-				cornersInd = 0;
-				Destroy(gameObject);
-				DieVictoriously();
-			}
-		}
-		Vector3 moveDir = transform.position - corners[cornersInd].position;
-		transform.Translate(-moveDir.normalized * speed * Time.deltaTime, Space.World);
-	}
-	protected void LookAtDestination()
-	{
+	// TO BE REPLACED WITH A NAVMESHAGENT
+	// protected void moveToNextSpot()
+	// {
+	// 	// move towards next corner if you have reached 
+	// 	if (Vector3.Distance(transform.position, corners[cornersInd].position) < 0.5f)
+	// 	{
+	// 		cornersInd++;
+	// 		if (cornersInd >= corners.Length)
+	// 		{
+	// 			cornersInd = 0;
+	// 			Destroy(gameObject);
+	// 			dieVictoriously();
+	// 		}
+	// 	}
+	// 	Vector3 moveDir = transform.position - corners[cornersInd].position;
+	// 	transform.Translate(-moveDir.normalized * speed * Time.deltaTime, Space.World);
+	// }
+	// protected void LookAtDestination()
+	// {
   
-        Vector3 targetDir = corners[cornersInd].position - transform.position;
+    //     Vector3 targetDir = corners[cornersInd].position - transform.position;
 
-        // The step size is equal to speed times frame time.
-        float step = turnSpeed * Time.deltaTime;
+    //     // The step size is equal to speed times frame time.
+    //     float step = turnSpeed * Time.deltaTime;
 
-        Vector3 newDir = Vector3.RotateTowards(transform.forward, targetDir, step, 0.0f);
-        // Debug.DrawRay(transform.position, newDir, Color.red);
+    //     Vector3 newDir = Vector3.RotateTowards(transform.forward, targetDir, step, 0.0f);
+    //     // Debug.DrawRay(transform.position, newDir, Color.red);
 
-        // Move our position a step closer to the target.
-        transform.rotation = Quaternion.LookRotation(newDir);
+    //     // Move our position a step closer to the target.
+    //     transform.rotation = Quaternion.LookRotation(newDir);
 
-	}
+	// }
 
 	public int GetHealth() {return (health);}
 	public int GetMaxHealth() {return maxHealth;}
@@ -163,6 +172,7 @@ public abstract class Creep : MonoBehaviour, IPushable, IHittable, IStunnable, I
 		// move away from the tower that did the pushing. After a certain amount of seconds check if what is below isa  cloud in a certain amount of seconds
 		// how do i turn off this script or it's child class once it's supposed to fall. 
 		// preserve how long 
+		agent.enabled = false;
 		if (forceToBePushedBy == 0)
 			return;
 		timeSincePush = Time.time + howLongAmIPushedFor;
@@ -229,36 +239,42 @@ public abstract class Creep : MonoBehaviour, IPushable, IHittable, IStunnable, I
 	}
 	public void GetStunned(float seconds)
 	{
+		if (agent.isStopped == true)
+		{
+			return;
+		}
+		agent.isStopped = true;
+		agent.SetDestination(transform.position);
+
 		// TODO: play a stunned animation. and sound!
-		if (speed == 0)
-			CancelInvoke(); 
-		else
-			tempSpeed = speed;
-		speed = 0;
+		// if (speed == 0)
+		// 	CancelInvoke(); 
+		// else
+		// 	tempSpeed = speed;
+		// speed = 0;
 		Invoke("ResetSpeed", seconds);
 		// stop for seconds and 
 	}
 	float tempSpeed;
 	public void BeNetted(float seconds)
 	{
-		if (speed == 0)
-			CancelInvoke(); 
-		else
-			tempSpeed = speed;
-		speed = 0;
+		if (agent.isStopped == true)
+		{
+			return;
+		}
+		agent.isStopped = true;
+		agent.SetDestination(transform.position);
 		Invoke("ResetSpeed", seconds);
 	}
 	public void BeSlowed(float amt)
 	{
-		if (speed < tempSpeed)
+		if (agent.speed < tempSpeed)
 			{
-				CancelInvoke();
-				Invoke("ResetSpeed", 2.0f);
 				return;
 			}
 		else
 			tempSpeed = speed;
-		speed *= amt;
+		agent.speed *= amt;
 		// Debug.Log("Creep Speed: " +speed);
 		// speed = speed > amt ? (speed - amt) : 0f;
 
@@ -311,14 +327,10 @@ public abstract class Creep : MonoBehaviour, IPushable, IHittable, IStunnable, I
 			}
 		yield return null;
 	}
-	void ResetSpeed() {speed = tempSpeed;}
-
-	/// <summary>
-	/// OnMouseDown is called when the user has pressed the mouse button while
-	/// over the GUIElement or Collider.
-	/// </summary>
-	void OnMouseDown()
+	void ResetSpeed() 
 	{
-		
+		agent.isStopped = false;
+		agent.SetDestination(corners[corners.Length - 1].position);
+		agent.speed = tempSpeed;
 	}
 }

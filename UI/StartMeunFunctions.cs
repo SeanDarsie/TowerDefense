@@ -6,7 +6,7 @@ using UnityEngine.EventSystems;
 
 public class StartMeunFunctions : MonoBehaviour,IPointerEnterHandler,IPointerExitHandler,IPointerDownHandler,IPointerUpHandler {
 	Text myText;
-	public enum MenuFunction {START, QUIT, OPTIONS, CREDITS, LEVEL}
+	public enum MenuFunction {START, QUIT, OPTIONS, CREDITS, LEVEL,SWITCHMENUS}
 	public MenuFunction menuFunction;
 
 	delegate void MyMenuFucntion();
@@ -19,6 +19,7 @@ public class StartMeunFunctions : MonoBehaviour,IPointerEnterHandler,IPointerExi
 	[SerializeField] Image line2;
 	[Tooltip("What level to activate with this button")]
 	[SerializeField] int level;
+	[SerializeField] string whatMenuToActivate;
 	// Use this for initialization
 	void Start () {
 		myText = GetComponentInChildren<Text>();
@@ -101,6 +102,11 @@ public class StartMeunFunctions : MonoBehaviour,IPointerEnterHandler,IPointerExi
 		GetComponentInChildren<Text>().text = "Level " + (level + 1).ToString();
 		FindObjectOfType<LevelChooser>().chosenLevel = level;
 	}
+
+	void SwitchMenu()
+	{
+		FindObjectOfType<UImanager>().SwithMenus(whatMenuToActivate);
+	}
 	void SwitchDelegateFunction()
 	{
 		switch(menuFunction)
@@ -122,6 +128,9 @@ public class StartMeunFunctions : MonoBehaviour,IPointerEnterHandler,IPointerExi
 			case StartMeunFunctions.MenuFunction.LEVEL:
 				myMenuFunction = ChooseALevel;
 //				Debug.Log("startMenuFunctions button for choosing a level");
+				break;
+			case StartMeunFunctions.MenuFunction.SWITCHMENUS:
+				myMenuFunction = SwitchMenu;
 				break;
 			default:
 				break;

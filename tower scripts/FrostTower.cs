@@ -11,6 +11,7 @@ public class FrostTower : Tower {
 		}
 		if (abilityReady == true)
 		{
+			FindObjectOfType<TowerPlacingScript>().towerUIAbleToBeSummoned = false;
 			if (Input.GetMouseButtonDown(0))
 			{
 				FlashFreeze();

@@ -9,6 +9,7 @@ using UnityEngine.UI;
 // I think i will make a class that simply turns on gameobjects with a switch statement that takes a string.
 
 public class StartMenuManager : MonoBehaviour {
+	[SerializeField] GameObject towerUI;
 	[SerializeField] GameObject startMenuUI;
 	[SerializeField] GameObject[] allCameras;
 	[SerializeField] GameObject[] allCreepspawners;
@@ -31,12 +32,15 @@ public class StartMenuManager : MonoBehaviour {
 	}
 	 public void StartGame()
 	 {
+		towerUI.SetActive(false);
+		FindObjectOfType<TowerPlacingScript>().towerUIAbleToBeSummoned = true;
+		musicManager.ReduceMusicVolWhenPaused(true);
 		int whatLevelIsIt = FindObjectOfType<LevelChooser>().chosenLevel;
 		Time.timeScale = 1.0f;
 		startMenuUI.SetActive(false);
 		playerStats.ResetLevelHealthAndMonies();
 		musicManager.StartStageMusic();
-
+		musicManager.ReduceMusicVolWhenPaused(false);
 		//Set all cameras to inactive before choosing the correct camera.
 		foreach (GameObject x in allCameras)
 			x.SetActive(false);

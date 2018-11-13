@@ -77,6 +77,7 @@ public class QuitAndRestart : MonoBehaviour {
 
 		// musicManager.GameUnPausedMusicVolUp(); // put the music volume back up
 		musicManager.StartMenuMusic();
+		musicManager.ReduceMusicVolWhenPaused(false);
 	}
 
 	public void RestartLevel() // restart current level. 
@@ -93,10 +94,12 @@ public class QuitAndRestart : MonoBehaviour {
 		FindObjectOfType<TowerPlacingScript>().towerModel = null;
 		FindObjectOfType<TowerPlacingScript>().towerPrefab = null;
 		FindObjectOfType<TowerPlacingScript>().towerSelected = false;
+		FindObjectOfType<TowerPlacingScript>().towerUIAbleToBeSummoned = true;
 		BeeScript[] allBees = FindObjectsOfType<BeeScript>();
 		foreach(BeeScript x in allBees)
 			x.gameObject.SetActive(false);
 		resumeButton.interactable = true;
+		musicManager.ReduceMusicVolWhenPaused(false);
 	}
 
 	public void PauseGame(bool hasPlayerLost)
@@ -108,6 +111,8 @@ public class QuitAndRestart : MonoBehaviour {
 			}
 		// else
 		// 	musicManager.GamePausedMusicVolDown();
+		FindObjectOfType<TowerPlacingScript>().towerUIAbleToBeSummoned = false;
+		musicManager.ReduceMusicVolWhenPaused(true);
 		playerHasLost = hasPlayerLost;
 		gamePaused = true;
 		pauseMenuUI.SetActive(true);
@@ -117,14 +122,17 @@ public class QuitAndRestart : MonoBehaviour {
 	}
 	public void UnPauseGame()
 	{
+		
 		if (playerHasLost == true)
 			return;
+		musicManager.ReduceMusicVolWhenPaused(false);
 		gamePaused = false;
 		Time.timeScale = 1f;
 		pauseMenuUI.SetActive(false);
 		AreYouSureQuitUI.SetActive(false);
 		AreYouSureRestartUI.SetActive(false);
-		musicManager.GameUnPausedMusicVolUp();
+		// musicManager.GameUnPausedMusicVolUp();
+		FindObjectOfType<TowerPlacingScript>().towerUIAbleToBeSummoned = true;
 	}
 	public void AreYouSureQuit()
 	{

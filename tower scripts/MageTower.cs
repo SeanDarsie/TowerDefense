@@ -16,6 +16,7 @@ public class MageTower : Tower {
 		}
 		if (abilityReady == true)
 		{
+			FindObjectOfType<TowerPlacingScript>().towerUIAbleToBeSummoned = false;
 			if (Input.GetMouseButtonDown(0))
 			{
 				ForcePush();

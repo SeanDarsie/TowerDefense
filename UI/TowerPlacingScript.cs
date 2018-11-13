@@ -4,9 +4,11 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class TowerPlacingScript : MonoBehaviour {
+	[SerializeField] GameObject towerUI;
+	public bool towerUIAbleToBeSummoned = true;
 	public GameObject towerModel; // for showing where the tower will be placed
 	public GameObject towerPrefab;
-	public bool towerSelected;
+	public bool towerSelected; // if the player has successfully chosen a tower to place.
 	public int selectedTowerPrice = 0;
 	public GameObject selectetTowerUI;
 	[SerializeField] Text towerName;
@@ -27,6 +29,13 @@ public class TowerPlacingScript : MonoBehaviour {
 	/// </summary>
 	void Update()
 	{
+		if (Input.GetMouseButtonUp(0))
+			Invoke("DeactivateTowerSelectUI", 0.1f);
+		if (Input.GetMouseButtonDown(0) && towerSelected == false && towerUIAbleToBeSummoned == true)
+			{
+				towerUI.transform.position = Input.mousePosition;
+				towerUI.SetActive(true);
+			}
 		if (Input.GetMouseButtonDown(1) && towerSelected == true)
 		{
 			towerModel.SetActive(false);
@@ -42,18 +51,6 @@ public class TowerPlacingScript : MonoBehaviour {
 			if (FindObjectOfType<PlayerStats>().monies >= towerToUpgrade.GetComponent<Tower>().GetUpgradePrice())
 				upgradeTowerButton.interactable = true;
 		}
-
-		// if (Input.GetMouseButtonDown(0))
-		// 	{	RaycastHit hit;
-		// 		if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, 1000))
-		// 		{
-		// 			// Tower tower = hit.collider.GetComponent<Tower>();
-		// 			// if (tower == null)
-		// 			// 	CloseTowerUI();
-		// 		}
-		// 		// else
-		// 		// 	CloseTowerUI();
-		// 	}
 	}
 	public void ShowTowerStats(GameObject tower)
 	{
@@ -63,7 +60,10 @@ public class TowerPlacingScript : MonoBehaviour {
 			towerToUpgrade = null;
 			return;
 		}
-		towerModel.SetActive(false);
+		if (towerModel != null)
+			towerModel.SetActive(false);
+		if (towerUI.activeInHierarchy)
+			towerUI.SetActive(false);
 		towerSelected = false;
 		sellTowerButton.interactable = true;
 		Tower currentTower = tower.GetComponent<Tower>();
@@ -111,6 +111,10 @@ public class TowerPlacingScript : MonoBehaviour {
 		towerSell.text = "Sell: "+ currentTower.GetSellPrice().ToString();
 		towerLevel.text = "Level: " + currentTower.GetLevel().ToString();
 		towerToUpgrade = tower;
+	}
+	void DeactivateTowerSelectUI()
+	{
+		towerUI.SetActive(false);
 	}
 	// need a function to sell selected tower or upgrade selected tower
 }

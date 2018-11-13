@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Audio;
 
 public class MusicManager : MonoBehaviour {
 	AudioSource audioSource;
@@ -83,10 +84,12 @@ public class MusicManager : MonoBehaviour {
 	// {
 	// 	// reduce volume to zero. Change clip. Increase volume to max again.
 	// }
-
+	[SerializeField] AudioMixerSnapshot paused;
+	[SerializeField] AudioMixerSnapshot unPaused;
 	public void AdjustVol(float newVol)
 	{
-		audioSource.volume = newVol * 0.9f;
+
+		audioSource.volume = newVol * 0.9f; // instead of this audiousource we are going to use the master mixer for music
 		maxVol = 0.9f * newVol;
 		minVolInMenu = 0.4f * newVol;
 	}
@@ -149,5 +152,12 @@ public class MusicManager : MonoBehaviour {
 		yield return null;
 	}
 
+	public void ReduceMusicVolWhenPaused(bool gamePaused)
+	{
+		if (gamePaused == true)
+			paused.TransitionTo(.5f);
+		else
+			unPaused.TransitionTo(.5f);
+	}
 	// =------------------------- Coroutines ------------------------------= //
 }

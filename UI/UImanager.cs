@@ -6,7 +6,7 @@ using UnityEngine.UI;
 //this class will be in charge of making sure all the ui elements are up to date and assign the right ui to the right place???? wtf amisaying
 public class UImanager : MonoBehaviour {
 	[SerializeField] GameObject startMenu;
-	[SerializeField] GameObject optionsMenu;
+	[SerializeField] GameObject towersMenu;
 	// [SerializeField] GameObject credits;
 	// [SerializeField] GameObject whatOtherMenuOptionsDoINeed;
 
@@ -24,15 +24,15 @@ public class UImanager : MonoBehaviour {
 		{
 			case "Main":
 				startMenu.SetActive(true);
-				optionsMenu.SetActive(false);
+				towersMenu.SetActive(false);
 				break;
-			case "Options":
+			case "Towers":
 				startMenu.SetActive(false);
-				optionsMenu.SetActive(true);
+				towersMenu.SetActive(true);
 				break;
 			case "None": // set's all UI gameobjects inactive. Not sure if needed.
 				startMenu.SetActive(false);
-				optionsMenu.SetActive(false);
+				towersMenu.SetActive(false);
 				break;
 			case "":
 				Debug.LogError("Impressive! you managed to call SwitchMenus(string nameOfMenuToActivate) with an empty string");
@@ -40,7 +40,7 @@ public class UImanager : MonoBehaviour {
 			default:
 				Debug.LogWarning("No menu named " + nameOfMenuToActivate + " exists. Activating main menu");
 				startMenu.SetActive(true);
-				optionsMenu.SetActive(false);
+				towersMenu.SetActive(false);
 				break;
 			
 		}

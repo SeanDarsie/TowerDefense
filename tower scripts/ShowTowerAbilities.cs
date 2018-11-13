@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class ShowTowerAbilities : MonoBehaviour {
 	[SerializeField] GameObject towerUICanvas;
+	GameObject towerUI;
 	TowerPlacingScript towerPlacer;
 
 	/// <summary>
@@ -14,7 +16,17 @@ public class ShowTowerAbilities : MonoBehaviour {
 	{
 		CloseTowerUI();
 		towerPlacer = FindObjectOfType<TowerPlacingScript>();
+		towerUI = GameObject.FindWithTag("TowerUI");
 	}
+	/// <summary>
+	/// This function is called when the object becomes enabled and active.
+	/// </summary>
+	void OnEnable()
+	{
+		towerPlacer = FindObjectOfType<TowerPlacingScript>();
+		towerUI = GameObject.FindWithTag("TowerUI");
+	}
+
 	/// <summary>
 	/// OnMouseDown is called when the user has pressed the mouse button while
 	/// over the GUIElement or Collider.
@@ -27,7 +39,9 @@ public class ShowTowerAbilities : MonoBehaviour {
 		towerUICanvas.SetActive(true);
 		towerPlacer.selectetTowerUI = towerUICanvas;
 		towerPlacer.ShowTowerStats(gameObject);
+		// GameObject.FindWithTag("TowerUI").SetActive(false);
 	}
-
+	void OnMouseOver() { towerPlacer.towerUIAbleToBeSummoned = false; }
+	void OnMouseExit() { towerPlacer.towerUIAbleToBeSummoned = true; }
 	public void CloseTowerUI()	{towerUICanvas.SetActive(false);}
 }

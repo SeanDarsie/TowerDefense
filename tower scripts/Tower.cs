@@ -94,11 +94,18 @@ abstract public class Tower : MonoBehaviour {
 			return;
 		abilityReady = true;
 		abilityIndicator.SetActive(true); 
+		FindObjectOfType<TowerPlacingScript>().towerUIAbleToBeSummoned = false;
 	}
 	public void DeactivateAbilityIndicator() // DeactivateAbilityIndicator in Tower class
 	{
 		abilityIndicator.SetActive(false);
 		abilityReady = false;
+		FindObjectOfType<TowerPlacingScript>().towerUIAbleToBeSummoned = false;
+		Invoke("ResetTowerSelectingAbility", 0.5f);
+	}
+	void ResetTowerSelectingAbility()
+	{
+		FindObjectOfType<TowerPlacingScript>().towerUIAbleToBeSummoned = true;
 	}
 
 }

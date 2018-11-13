@@ -28,7 +28,18 @@ public class CreepManager : MonoBehaviour {
 		 activeCreeps.Clear();
 
 		Creep[] creepers = FindObjectsOfType<Creep>();
+		CreepNav[] navCreeps = FindObjectsOfType<CreepNav>();
 		foreach (Creep x in creepers)
+		{
+			if (x.gameObject.activeInHierarchy)
+				activeCreeps.Add(x.gameObject);
+			else
+			{
+				// Debug.Log("Destroying inactive creep-> " + x.gameObject.name);
+				Destroy(x.gameObject);
+			}
+		}
+		foreach (CreepNav x in navCreeps)
 		{
 			if (x.gameObject.activeInHierarchy)
 				activeCreeps.Add(x.gameObject);

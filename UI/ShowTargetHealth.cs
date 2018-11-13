@@ -6,10 +6,19 @@ public class ShowTargetHealth : MonoBehaviour {
 	[SerializeField] Slider health;
 	[SerializeField] GameObject healthUICanvas;
 	[SerializeField] Creep creep;
+	[SerializeField] CreepNav creepNav;
+	
 	void Update () {
-		health.minValue = 0f;
-		health.maxValue = (float)creep.GetMaxHealth();
-		health.value = (float)creep.GetHealth();
+		if (creep != null) {
+			health.minValue = 0f;
+			health.maxValue = (float)creep.GetMaxHealth();
+			health.value = (float)creep.GetHealth();
+		}
+		if (creepNav != null) {
+			health.minValue = 0f;
+			health.maxValue = (float)creepNav.GetMaxHealth();
+			health.value = (float)creepNav.GetHealth();
+		}
 	}
 	// void OnMouseDown()			
 	// {

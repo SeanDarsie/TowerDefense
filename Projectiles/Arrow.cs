@@ -20,12 +20,20 @@ public class Arrow : MonoBehaviour {
 	[HideInInspector]
 	public int damage;
 	[SerializeField] float arrowSpeed;
-
+	float timeCount;
 	void Update () {
+		Vector3 lookDir = target.position - transform.position;
+		Quaternion rotation = Quaternion.LookRotation(lookDir);
+		
+
+		transform.rotation = Quaternion.Slerp(transform.rotation, rotation, timeCount);
+        timeCount = timeCount + Time.deltaTime;
+
+		transform.Translate(Vector3.forward * arrowSpeed * Time.deltaTime, Space.Self);
 		// move towards target
 		//  = target.position - transform.position;
-		transform.LookAt(target.position);
-		transform.Translate(Vector3.forward * Time.deltaTime * arrowSpeed);
+		// transform.LookAt(target.position);
+		// transform.Translate(Vector3.forward * Time.deltaTime * arrowSpeed);
 		if (target.gameObject.activeInHierarchy == false)
 			Destroy(gameObject);
 	}

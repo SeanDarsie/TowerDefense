@@ -13,6 +13,7 @@ public class ShockTower : Tower {
 		}
 		if (abilityReady == true)
 		{
+			FindObjectOfType<TowerPlacingScript>().towerUIAbleToBeSummoned = false;
 			if (Input.GetMouseButtonDown(0))
 			{
 				ChainLightning();

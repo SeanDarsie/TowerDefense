@@ -20,6 +20,7 @@ public class BeeTower : Tower {
 		}
 		if (abilityReady == true)
 		{
+			FindObjectOfType<TowerPlacingScript>().towerUIAbleToBeSummoned = false;
 			if (Input.GetMouseButtonDown(0))
 			{
 				Frenzy(); // ????????????? what ability does a bee tower want to do? Enrage?? spew honey? Slow them?
