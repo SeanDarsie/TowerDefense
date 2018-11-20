@@ -54,7 +54,8 @@ public class ChooseTower : DraggableUI {
 		{
 			if (Vector3.Distance(transform.position, x.position) < dist			&&
 				Vector3.Distance(transform.position, x.position) <= minDistance	&&
-				x.GetComponent<TowerSlot>().chosen == false)
+				x.GetComponent<TowerSlot>().chosen == false						&&
+				x.GetComponent<TowerSlot>().locked == false)
 			{
 				endPosition = x.position;
 				pickedSlot = x;

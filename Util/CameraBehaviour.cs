@@ -5,6 +5,7 @@ using UnityEngine;
 public class CameraBehaviour : MonoBehaviour {
 
 	[SerializeField] float rotationSpeed;
+	[SerializeField] float rotationSpeedDecay = 2;
 	[SerializeField] float rotationIncriment;
 	[SerializeField] float minHeight;
 	[SerializeField] float maxHeight;
@@ -18,6 +19,16 @@ public class CameraBehaviour : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		transform.Rotate(Vector3.up * rotationSpeed);
+		if (rotationSpeed < -0.01)
+		{
+			rotationSpeed += -(rotationSpeed / rotationSpeedDecay);
+		}
+		else if (rotationSpeed >= 0.01)
+		{
+			rotationSpeed -= (rotationSpeed / rotationSpeedDecay);
+		}
+		else
+			rotationSpeed = 0;
 		if (Input.GetKey(KeyCode.A))
 		{
 			RotateLeft();
@@ -61,5 +72,9 @@ public class CameraBehaviour : MonoBehaviour {
 		if (transform.position.y <= minHeight)
 			return;
 		transform.Translate(-Vector3.up * moveSpeed);
+	}
+	void ResetCameraRotationSpeed()
+	{
+		rotationSpeed = 0.0f;
 	}
 }

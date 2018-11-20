@@ -9,6 +9,7 @@ public class TowerSlot : MonoBehaviour {
 	[SerializeField] GameObject[] towers;
 	[HideInInspector] public bool chosen = false;
 	[HideInInspector] public int myTower = -1;
+	public bool locked = false;
 	// Use this for initialization
 	void Start () {
 		
@@ -21,6 +22,8 @@ public class TowerSlot : MonoBehaviour {
 
 	public void AssignTower(int tower)
 	{
+		if (locked)
+			return;
 		FindObjectOfType<TowerManager>().AssignTower(positionIndex, towers[tower]);
 		GetComponentInChildren<Text>().text = "";
 		myTower = tower;

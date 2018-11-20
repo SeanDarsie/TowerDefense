@@ -7,6 +7,7 @@ public class TowerManager : MonoBehaviour {
 	
 	Dictionary<int,GameObject> activeTowers = new Dictionary<int,GameObject>();
 	[SerializeField] Transform[] buttonPositions;
+	[SerializeField] GameObject[] lockedTowerButtons;
 	[SerializeField] GameObject[] allTowers;
 	[SerializeField] TowerSlot[] allSlots;
 	// [SerializeField] ;
@@ -61,6 +62,11 @@ public class TowerManager : MonoBehaviour {
 			{
 				activeTowers[i].transform.position = buttonPositions[i].position;
 				activeTowers[i].SetActive(true);
+				lockedTowerButtons[i].SetActive(false);
+			}
+			else
+			{
+				lockedTowerButtons[i].SetActive(true);
 			}
 		}
 		// activate the chosen towers. Place them in the positions that correspond to the indices that have been saved.

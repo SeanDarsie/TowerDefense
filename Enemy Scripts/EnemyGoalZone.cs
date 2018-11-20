@@ -20,7 +20,7 @@ public class EnemyGoalZone : MonoBehaviour { // just needs to handle killing the
 	/// <param name="other">The other Collider involved in this collision.</param>
 	void OnTriggerEnter(Collider other)
 	{
-		Debug.Log("GoalZone:" + other.name);
+		// Debug.Log("GoalZone:" + other.name);
 		Creep creep = other.GetComponent<Creep>();
 		CreepNav creepNav = other.GetComponent<CreepNav>();
 		if (creep != null)
