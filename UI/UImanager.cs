@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class UImanager : MonoBehaviour {
 	[SerializeField] GameObject startMenu;
 	[SerializeField] GameObject towersMenu;
+	[SerializeField] GameObject storyMenu;
 	// [SerializeField] GameObject credits;
 	// [SerializeField] GameObject whatOtherMenuOptionsDoINeed;
 
@@ -22,15 +23,23 @@ public class UImanager : MonoBehaviour {
 	{
 		switch(nameOfMenuToActivate)
 		{
+			case "Story":
+				startMenu.SetActive(false);
+				towersMenu.SetActive(false);
+				storyMenu.SetActive(true);
+				break;
 			case "Main":
+				storyMenu.SetActive(false);
 				startMenu.SetActive(true);
 				towersMenu.SetActive(false);
 				break;
 			case "Towers":
+				storyMenu.SetActive(false);
 				startMenu.SetActive(false);
 				towersMenu.SetActive(true);
 				break;
 			case "None": // set's all UI gameobjects inactive. Not sure if needed.
+				storyMenu.SetActive(false);
 				startMenu.SetActive(false);
 				towersMenu.SetActive(false);
 				break;
