@@ -8,6 +8,11 @@ public class ShowTargetHealth : MonoBehaviour {
 	[SerializeField] Creep creep;
 	[SerializeField] CreepNav creepNav;
 	
+	void Start()
+	{
+		creep = GetComponent<Creep>();
+		creepNav = GetComponent<CreepNav>();
+	}
 	void Update () {
 		if (creep != null) {
 			health.minValue = 0f;

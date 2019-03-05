@@ -14,10 +14,7 @@ using UnityEngine;
 
 abstract public class Tower : MonoBehaviour {
 	protected PlayerStats player;
-	/// <summary>
-	/// Start is called on the frame when a script is enabled just before
-	/// any of the Update methods is called the first time.
-	/// </summary>
+	[SerializeField] protected CountEnemiesInCollider enemiesInRange;
 	public enum DamageType {PHYSICAL,LIGHTNING,FROST,FIRE,POISON, MAGIC};
 	public DamageType damageType; 
 	protected AudioSource audioSource;
@@ -37,6 +34,7 @@ abstract public class Tower : MonoBehaviour {
 	[SerializeField] protected  float range;
 	[SerializeField] protected float rangeUpgrade;
 	[SerializeField] protected  int level;
+	[SerializeField] protected 	int	towerMaxLevel = 10;
 	[SerializeField] protected  int price;
 	[SerializeField] protected  int upgradePrice;
 	[SerializeField] protected  int sellPrice;
@@ -53,6 +51,7 @@ abstract public class Tower : MonoBehaviour {
 		creepManager = FindObjectOfType<CreepManager>();
 		player = FindObjectOfType<PlayerStats>();	
 		audioSource = GetComponent<AudioSource>();
+		enemiesInRange = GetComponentInChildren<CountEnemiesInCollider>();
 	}
 	
 	// =------------------------- Getters ------------------------= //
@@ -75,6 +74,8 @@ abstract public class Tower : MonoBehaviour {
 	public void UpgradeTower()
 	{
 		if (player.monies < upgradePrice)
+			return;
+		else if ((level + 1) > towerMaxLevel)
 			return;
 		else
 			player.AdjustMonies(-upgradePrice);

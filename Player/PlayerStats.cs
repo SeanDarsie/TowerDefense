@@ -8,6 +8,7 @@ public class PlayerStats : MonoBehaviour {
 	[SerializeField] int health = 20;
    	[SerializeField] int startingHealth = 20;
 	public int monies = 50;
+	[SerializeField] int maxMonies = 9999;
 	[SerializeField] int startingMonies;
 	[SerializeField] Text scoreTxt;
 	[SerializeField] Text lifeTxt;
@@ -44,6 +45,8 @@ public class PlayerStats : MonoBehaviour {
 	public void AdjustMonies(int someAmount)
 	{
 		monies += someAmount;
+		if (monies > maxMonies)
+			monies = maxMonies;
 		moniesTxt.text  = "GOLD: " + monies;
 	}
 	void Lose()

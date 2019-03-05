@@ -7,7 +7,8 @@ using UnityEngine.UI;
 public class UImanager : MonoBehaviour {
 	[SerializeField] GameObject startMenu;
 	[SerializeField] GameObject towersMenu;
-	[SerializeField] GameObject storyMenu;
+	[SerializeField] GameObject levelSelect;
+	[SerializeField] GameObject controlsMenu;
 	// [SerializeField] GameObject credits;
 	// [SerializeField] GameObject whatOtherMenuOptionsDoINeed;
 
@@ -23,23 +24,33 @@ public class UImanager : MonoBehaviour {
 	{
 		switch(nameOfMenuToActivate)
 		{
-			case "Story":
+			case "LevelSelect":
 				startMenu.SetActive(false);
 				towersMenu.SetActive(false);
-				storyMenu.SetActive(true);
+				levelSelect.SetActive(true);
+				controlsMenu.SetActive(false);
 				break;
 			case "Main":
-				storyMenu.SetActive(false);
+				levelSelect.SetActive(false);
 				startMenu.SetActive(true);
 				towersMenu.SetActive(false);
+				controlsMenu.SetActive(false);
 				break;
 			case "Towers":
-				storyMenu.SetActive(false);
+				levelSelect.SetActive(false);
 				startMenu.SetActive(false);
 				towersMenu.SetActive(true);
+				controlsMenu.SetActive(false);
 				break;
 			case "None": // set's all UI gameobjects inactive. Not sure if needed.
-				storyMenu.SetActive(false);
+				levelSelect.SetActive(false);
+				startMenu.SetActive(false);
+				towersMenu.SetActive(false);
+				controlsMenu.SetActive(false);
+				break;
+			case "Controls":
+				controlsMenu.SetActive(true);
+				levelSelect.SetActive(false);
 				startMenu.SetActive(false);
 				towersMenu.SetActive(false);
 				break;
@@ -50,6 +61,8 @@ public class UImanager : MonoBehaviour {
 				Debug.LogWarning("No menu named " + nameOfMenuToActivate + " exists. Activating main menu");
 				startMenu.SetActive(true);
 				towersMenu.SetActive(false);
+				controlsMenu.SetActive(false);
+				levelSelect.SetActive(false);
 				break;
 			
 		}

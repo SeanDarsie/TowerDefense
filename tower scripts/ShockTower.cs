@@ -29,12 +29,12 @@ public class ShockTower : Tower {
 	float chainLightningCD;
 	public override void Fire()
 	{
-		shotCD += reloadSpeed;
-		float rangeFinder = 10000f;
-		foreach(GameObject x in creepManager.getActiveCreeps())
+
+		float rangeFinder = 0f;
+		foreach (GameObject x in enemiesInRange.creepsInsideCollider)
 		{
 			float distanceToTower = Vector3.Distance(firePos.position, x.transform.position);
-			if (distanceToTower < rangeFinder && distanceToTower <= range && x.activeInHierarchy && Mathf.Abs(x.transform.position.y - transform.position.y) <= 1f)
+			if (distanceToTower > rangeFinder && distanceToTower <= range && x.activeInHierarchy && Mathf.Abs(x.transform.position.y - transform.position.y) <= 1f)
 				{
 					target = x.transform;
 					rangeFinder = distanceToTower;
@@ -47,6 +47,7 @@ public class ShockTower : Tower {
 		DigitalRuby.LightningBolt.LightningBoltScript lightningBolt = lightningPrefab.GetComponent<DigitalRuby.LightningBolt.LightningBoltScript>();
 		lightningBolt.EndObject = target.gameObject;
 		lightningPrefab.SetActive(true);
+		shotCD += reloadSpeed;
 		StartCoroutine(LightingFiringSequence(target.gameObject, lightningStrikes));
 		// so now we have a target. we can pass that target to a coroutine that will fire x number of shots over some seconds and presumably show some cool lightning effect while it does it. for now i'm just going to throw shit at it i think
 		// i think i'm going to start a coroutine to do attacks over a period of time. 

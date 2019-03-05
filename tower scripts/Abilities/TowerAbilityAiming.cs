@@ -14,9 +14,14 @@ public class TowerAbilityAiming : MonoBehaviour {
 	void Update () {
 		// follow mouse input and rotate accordingly
 		// Quaternion test = new Quaternion();
-		Vector3 mousePositionInFram = new Vector3(0,Input.mousePosition.x,0);
-		transform.Rotate(-(oldMousePosition - mousePositionInFram) * rotationSpeed);
-		oldMousePosition = new Vector3(0,Input.mousePosition.x, 0);
+		Vector3 mousePosition = new Vector3(Input.mousePosition.x - (Screen.width/2), 0,Input.mousePosition.y - (Screen.height/2));
+		Quaternion rotation = Quaternion.LookRotation(transform.position + mousePosition.normalized - transform.position);
+		transform.rotation = rotation;
+
+
+		// Vector3 mousePositionInFram = new Vector3(0,Input.mousePosition.x,0);
+		// transform.Rotate(-(oldMousePosition - mousePositionInFram) * rotationSpeed);
+		// oldMousePosition = new Vector3(0,Input.mousePosition.x, 0);
 		// transform.rotation = new Quaternion(0, Input.mousePosition.x,0,0);
 	}
 }

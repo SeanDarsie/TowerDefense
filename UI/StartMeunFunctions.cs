@@ -8,8 +8,10 @@ using UnityEditor;
 #endif
 
 public class StartMeunFunctions : MonoBehaviour,IPointerEnterHandler,IPointerExitHandler,IPointerDownHandler,IPointerUpHandler {
-	Text myText;
-	public enum MenuFunction {START, QUIT, OPTIONS, CREDITS, LEVEL,SWITCHMENUS}
+	[HideInInspector] public Text myText;
+	public enum MenuFunction {START, QUIT, CONTROLS, CREDITS, LEVEL,SWITCHMENUS}
+	[SerializeField] bool text = true;
+	[HideInInspector] public bool selected;
 	public MenuFunction menuFunction;
 
 	delegate void MyMenuFucntion();
@@ -18,24 +20,28 @@ public class StartMeunFunctions : MonoBehaviour,IPointerEnterHandler,IPointerExi
 	[SerializeField] Color normalColor;
 	[SerializeField] Color disabledColor;
 	[SerializeField] Color pressedColor;
-	[SerializeField] Image line1;
-	[SerializeField] Image line2;
+	[SerializeField] Color BackGroundColor;
+	[SerializeField] public Image line1;
+	[SerializeField] public Image line2;
 	[Tooltip("What level to activate with this button")]
 	[SerializeField] int level;
 	[SerializeField] string whatMenuToActivate;
+	bool disabled = false;
 	// Use this for initialization
 	void Start () {
 		myText = GetComponentInChildren<Text>();
 		myText.color = normalColor;
+		if (!text)
+			line1.color = BackGroundColor;
 		switch(menuFunction)
 		{
 			case StartMeunFunctions.MenuFunction.START:
 				// Debug.Log("My delegate function starts the game");
 				myMenuFunction = FindObjectOfType<StartMenuManager>().StartGame;
 				break;
-			case StartMeunFunctions.MenuFunction.OPTIONS:
-				// myMenuFunction = quitGame;
-				// Debug.Log("My delegate function opens Options Menu");
+			case StartMeunFunctions.MenuFunction.CONTROLS:
+				myMenuFunction = ShowControlsMenu;
+				// Debug.Log("My delegate function opens CONTROLS Menu");
 				break;
 			case StartMeunFunctions.MenuFunction.QUIT:
 				myMenuFunction = quitGame;
@@ -59,37 +65,76 @@ public class StartMeunFunctions : MonoBehaviour,IPointerEnterHandler,IPointerExi
 	/// </summary>
 	public void OnPointerEnter(PointerEventData eventData)
      {
-         myText.color = highlightedColor; //Or however you do your color
-		 line1.enabled = true;
-		 line2.enabled = true;
-		 line1.color = highlightedColor;
-		 line2.color = highlightedColor;
+		 if (selected == false)
+         	myText.color = highlightedColor; //Or however you do your color
+		 if (text == true)
+		 {
+			line1.enabled = true;
+		 	line2.enabled = true;
+		 	line1.color = highlightedColor;
+		 	line2.color = highlightedColor;
+		 }
+		 else
+		 {
+			if (selected == false)
+			{
+				line1.color = BackGroundColor;
+		 		line2.color = BackGroundColor;
+			}
+		 }
 		 SwitchDelegateFunction();
 		//  Debug.Log(eventData.pointerEnter);
      }
  
      public void OnPointerExit(PointerEventData eventData)
      {
-         myText.color = normalColor; //Or however you do your color
-		 line1.enabled = false;
-		 line2.enabled = false;
+		 if (selected == false)
+         	myText.color = normalColor; //Or however you do your color
+		 if (text == true)
+		 {
+			line1.enabled = false;
+		 	line2.enabled = false;
+		 }
+		 else
+		 {
+			 if (selected == false)
+			 {
+				line1.color = BackGroundColor;
+			 	line2.color = BackGroundColor;
+			 }
+		 }
 		 myMenuFunction = null;
      }
 	 public void OnPointerUp(PointerEventData eventData)
 	 {
-		myText.color = normalColor; //Or however you do your color
-		 line1.color = normalColor;
-		 line2.color =	normalColor;
-		 line1.enabled = false;
-		 line2.enabled = false;
-		 if (myMenuFunction != null)
+		if (text == true)
+		{
+			myText.color = normalColor; //Or however you do your color
+		 	line1.color = normalColor;
+		 	line2.color =	normalColor;
+		 	line1.enabled = false;
+		 	line2.enabled = false;
+		}
+		else
+		{
+			myText.color = normalColor;
+			line1.color = BackGroundColor;
+		}
+		if (myMenuFunction != null)
 			myMenuFunction();
 	 }
 	 public void OnPointerDown(PointerEventData eventData)
 	 {
 		 myText.color = pressedColor;
-		 line1.color = pressedColor;
-		 line2.color = pressedColor;
+		 if (text == true)
+		 {
+			line1.color = pressedColor;
+		 	line2.color = pressedColor;
+		 }
+		 else
+		 {
+			 line1.color = BackGroundColor;
+		 }
 	 }
 	void quitGame()
 	{
@@ -98,16 +143,28 @@ public class StartMeunFunctions : MonoBehaviour,IPointerEnterHandler,IPointerExi
  		#else
  			Application.Quit();
  		#endif
-
-
 	}
+
+	void ShowControlsMenu()
+	{
+		SwitchMenu();
+	}
+
 	[SerializeField] int maxLevel = 1; // TODO: make this a serialized field 
 	void ChooseALevel()
 	{
-		// 
-		level++;
-		if (level > maxLevel)
-			level = 0;
+		// highlight that the level is chosen
+		
+		// StartMeunFunctions[] buttons = FindObjectsOfType<StartMeunFunctions>();
+		foreach (StartMeunFunctions x in FindObjectsOfType<StartMeunFunctions>())
+		{
+			x.selected = false;
+			x.myText.color = x.normalColor;
+			x.line1.color = x.BackGroundColor;
+		}
+		selected = true;
+		line1.color = highlightedColor;
+		myText.color = pressedColor;
 		GetComponentInChildren<Text>().text = "Level " + (level + 1).ToString();
 		FindObjectOfType<LevelChooser>().chosenLevel = level;
 	}
@@ -124,7 +181,8 @@ public class StartMeunFunctions : MonoBehaviour,IPointerEnterHandler,IPointerExi
 				// Debug.Log("My delegate function starts the game");
 				myMenuFunction = FindObjectOfType<StartMenuManager>().StartGame;
 				break;
-			case StartMeunFunctions.MenuFunction.OPTIONS:
+			case StartMeunFunctions.MenuFunction.CONTROLS:
+				myMenuFunction = ShowControlsMenu;
 				// Debug.Log("My delegate function opens Options Menu");
 				break;
 			case StartMeunFunctions.MenuFunction.QUIT:

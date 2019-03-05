@@ -24,16 +24,27 @@ public class ArrerTower : Tower {
 
     public override void Fire()
     {
-		float rangeFinder = 10000f;
-		foreach(GameObject x in creepManager.getActiveCreeps())
+		float rangeFinder = 0f;
+		foreach (GameObject x in enemiesInRange.creepsInsideCollider)
 		{
 			float distanceToTower = Vector3.Distance(firePos.position, x.transform.position);
-			if (distanceToTower < rangeFinder && distanceToTower <= range && x.activeInHierarchy && Mathf.Abs(x.transform.position.y - transform.position.y) <= 1f)
+			if (distanceToTower > rangeFinder && distanceToTower <= range && x.activeInHierarchy && Mathf.Abs(x.transform.position.y - transform.position.y) <= 1f)
 				{
 					target = x.transform;
 					rangeFinder = distanceToTower;
 				}
 		}
+
+
+		// foreach(GameObject x in creepManager.getActiveCreeps())
+		// {
+		// 	float distanceToTower = Vector3.Distance(firePos.position, x.transform.position);
+		// 	if (distanceToTower < rangeFinder && distanceToTower <= range && x.activeInHierarchy && Mathf.Abs(x.transform.position.y - transform.position.y) <= 1f)
+		// 		{
+		// 			target = x.transform;
+		// 			rangeFinder = distanceToTower;
+		// 		}
+		// }
 		if (target == null ||
 			!target.gameObject.activeInHierarchy ||
 			Vector3.Distance(transform.position, target.position) > range)

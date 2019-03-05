@@ -32,7 +32,8 @@ public class StartMenuManager : MonoBehaviour {
 	}
 	 public void StartGame()
 	 {
-		towerUI.SetActive(false);
+		// towerUI.SetActive(false);
+		FindObjectOfType<UImanager>().SwithMenus("None");
 		FindObjectOfType<TowerPlacingScript>().towerUIAbleToBeSummoned = true;
 		FindObjectOfType<TowerManager>().InitializeTowerUI();
 		musicManager.ReduceMusicVolWhenPaused(true);
